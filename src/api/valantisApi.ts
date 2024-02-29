@@ -1,3 +1,4 @@
+import ProductStore from "../store/productsStore";
 import $axios_auth from "./interceptor";
 
 export interface ValantisActionParams {
@@ -12,7 +13,7 @@ type ProductBrand = null | string;
 
 type MasterQueryResponse =
   | Promise<string[]>
-  | Promise<ProductProps>
+  | Promise<ProductProps[]>
   | Promise<ProductBrand[]>;
 
 export interface ProductProps {
@@ -20,6 +21,10 @@ export interface ProductProps {
   id: string;
   price: number;
   product: string;
+}
+export interface TableProductProps extends ProductProps {
+  key: number | string;
+  index: number;
 }
 
 export default class ValantisApi {
@@ -34,7 +39,7 @@ export default class ValantisApi {
     return response.data.result;
   }
 
-  static async get_ids(offset: number, limit: number): Promise<string[]> {
+  static async get_ids(offset?: number, limit?: number): Promise<string[]> {
     const response = await $axios_auth.post("/", {
       action: "get_ids",
       params: { offset, limit },
@@ -42,7 +47,7 @@ export default class ValantisApi {
     return response.data.result;
   }
 
-  static async get_items(ids: string[]): Promise<ProductProps> {
+  static async get_items(ids: string[]): Promise<ProductProps[]> {
     const response = await $axios_auth.post("/", {
       action: "get_items",
       params: { ids },
@@ -68,5 +73,13 @@ export default class ValantisApi {
       params,
     });
     return response.data.result;
+  }
+
+  static async getAllItems(offset?: number, limit?: number) {
+    ProductStore.setStatus("loading");
+    const ids = await this.get_ids(offset, limit);
+    const data = await this.get_items(ids);
+    ProductStore.setProducts(data);
+    ProductStore.setStatus("ok");
   }
 }
