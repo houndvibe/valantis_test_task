@@ -11,34 +11,24 @@ export interface ValantisActionParams {
 
 type ProductBrand = null | string;
 
-type MasterQueryResponse =
-  | Promise<string[]>
-  | Promise<ProductProps[]>
-  | Promise<ProductBrand[]>;
-
 export interface ProductProps {
   brand: ProductBrand;
   id: string;
   price: number;
   product: string;
 }
+
 export interface TableProductProps extends ProductProps {
   key: number | string;
   index: number;
 }
 
-export default class ValantisApi {
-  static async sendMasterQuery(
-    action: string,
-    params: ValantisActionParams
-  ): Promise<MasterQueryResponse> {
-    const response = await $axios_auth.post("/", {
-      action,
-      params,
-    });
-    return response.data.result;
-  }
+export interface FilterParams {
+  filterType: string;
+  filterQuery: string | number;
+}
 
+export default class ValantisApi {
   static async get_ids(offset?: number, limit?: number): Promise<string[]> {
     const response = await $axios_auth.post("/", {
       action: "get_ids",
@@ -57,8 +47,8 @@ export default class ValantisApi {
 
   static async get_fields(
     field: string,
-    offset: number,
-    limit: number
+    offset?: number,
+    limit?: number
   ): Promise<ProductBrand[]> {
     const response = await $axios_auth.post("/", {
       action: "get_fields",
@@ -67,19 +57,66 @@ export default class ValantisApi {
     return response.data.result;
   }
 
-  static async filter(params: ValantisActionParams): Promise<string[]> {
+  static async filter(params: FilterParams): Promise<string[]> {
     const response = await $axios_auth.post("/", {
       action: "filter",
-      params,
+      params: { [params.filterType]: params.filterQuery },
     });
     return response.data.result;
   }
 
+  //метод, который позволяет получить массив с продуктами, с заданным отступом и лимитом
   static async getAllItems(offset?: number, limit?: number) {
     ProductStore.setStatus("loading");
+
     const ids = await this.get_ids(offset, limit);
     const data = await this.get_items(ids);
+
     ProductStore.setProducts(data);
     ProductStore.setStatus("ok");
+  }
+
+  //метод, который позовляет получить фильтрованный массив с продуктами
+  static async getFilteredItems(params: FilterParams) {
+    ProductStore.setStatus("loading");
+
+    const filteredIds = await this.filter(params);
+    const data = await this.get_items(filteredIds);
+
+    ProductStore.setProducts(data);
+    ProductStore.setStatus("ok");
+  }
+
+  //метод, который позовляет получить список брендов для дальнейшего использования в фильтре
+  static async getAllBrands() {
+    const brands = await ValantisApi.get_fields("brand");
+    const filtered = brands.filter((item: string | null) => item);
+
+    const set = new Set();
+    for (const item of filtered) {
+      set.add(item);
+    }
+
+    const uniqueItems: string[] = Array.from(set.values()) as string[];
+    ProductStore.setBrands(uniqueItems);
+  }
+  //метод, который позовляет получить список цен для дальнейшего вычисления нижней и верхней границы фильтра цен
+  static async getAllPrices() {
+    const prices = await ValantisApi.get_fields("price");
+
+    const set = new Set();
+    for (const price of prices) {
+      set.add(price);
+    }
+
+    const uniquePrices: string[] = Array.from(set.values()) as string[];
+    ProductStore.setPrices(uniquePrices);
+  }
+
+  //Получаем необходимые данные с сервера при запуске прилодения
+  static async init() {
+    this.getAllItems(0, 50);
+    this.getAllBrands();
+    this.getAllPrices();
   }
 }

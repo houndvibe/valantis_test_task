@@ -8,7 +8,7 @@ const { Header, Footer, Content } = Layout;
 
 const App: React.FC = () => {
   useEffect(() => {
-    ValantisApi.getAllItems(0, 100);
+    ValantisApi.init();
   }, []);
 
   return (

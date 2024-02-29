@@ -82,21 +82,30 @@ const InfoBlock: React.FC<InfoBlockProps> = ({ theme }) => {
             </p>
             <Divider />
             <p>
+              Фильтрация, как и требовалось в задании, происходит не на клиенте,
+              а на сервере, посредством метода
+              <span style={{ fontWeight: 600 }}> filter</span>,
+            </p>
+            <Divider />
+            <p>
               Для фронтенда использовал библиотеку{" "}
               <span style={{ fontWeight: 600 }}>antd</span>, Дополнительно
               стилизовал элементы при помощи{" "}
               <span style={{ fontWeight: 600 }}>scss modules</span>
             </p>
             <Divider />
+            <p>Некоторые более подробные коментарии можно найти в коде</p>
+            <Divider />
             <p>Использованные инструменты:</p>
             <p>1. React 18.2.0</p>
             <p>2. TypeScript 5.2.2</p>
-            <p>3. React-router 6.22</p>
-            <p>4. Vite 5.1.4</p>
-            <p>5. Axios 1.6</p>
-            <p>6. sass 1.71.1</p>
-            <p>7. antd 5.14.2</p>
-            <p>8. md5 2.3.0</p>
+            <p>3. ReactRouter 6.2</p>
+            <p>4. MobX 6.12</p>
+            <p>5. Vite 5.1.4</p>
+            <p>6. Axios 1.6</p>
+            <p>7. sass 1.71.1</p>
+            <p>8. antd 5.14.2</p>
+            <p>9. md5 2.3.0</p>
           </Flex>
         </Flex>
       ) : null}

@@ -4,11 +4,12 @@ import { observer } from "mobx-react-lite";
 import productsStore from "../../store/productsStore";
 import { processTableData } from "../../services/services";
 import { TableProductProps } from "../../api/valantisApi";
+import TableFilter from "../TableFilter/TableFilter";
 
 const ProductList = observer(() => {
-  const tableData = productsStore.products;
+  const products = productsStore.products;
   const loadingStatus = productsStore.status;
-  const processedData = processTableData(tableData);
+  const processedTableData = processTableData(products);
 
   const columns = [
     {
@@ -55,12 +56,12 @@ const ProductList = observer(() => {
         <div className={classes.thead}>Запрашиваем данные...</div>
       )}
       <Table
+        title={() => <TableFilter />}
         loading={loadingStatus === "ok" ? false : true}
-        dataSource={processedData}
+        dataSource={processedTableData}
         columns={columns}
         pagination={{
           position: ["topCenter", "bottomCenter"],
-          total: 8000,
           defaultPageSize: 50,
         }}
       />
