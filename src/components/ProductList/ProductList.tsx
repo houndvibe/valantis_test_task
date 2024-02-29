@@ -9,6 +9,7 @@ import TableFilter from "../TableFilter/TableFilter";
 const ProductList = observer(() => {
   const products = productsStore.products;
   const loadingStatus = productsStore.status;
+  const length = productsStore.length;
   const processedTableData = processTableData(products);
 
   const columns = [
@@ -62,6 +63,7 @@ const ProductList = observer(() => {
         columns={columns}
         pagination={{
           position: ["topCenter", "bottomCenter"],
+          total: length,
           defaultPageSize: 50,
         }}
       />

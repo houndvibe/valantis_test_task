@@ -90,6 +90,7 @@ export default class ValantisApi {
   //метод, который позовляет получить список брендов для дальнейшего использования в фильтре
   static async getAllBrands() {
     const brands = await ValantisApi.get_fields("brand");
+
     const filtered = brands.filter((item: string | null) => item);
 
     const set = new Set();
@@ -98,8 +99,11 @@ export default class ValantisApi {
     }
 
     const uniqueItems: string[] = Array.from(set.values()) as string[];
+
+    ProductStore.setLength(brands.length);
     ProductStore.setBrands(uniqueItems);
   }
+
   //метод, который позовляет получить список цен для дальнейшего вычисления нижней и верхней границы фильтра цен
   static async getAllPrices() {
     const prices = await ValantisApi.get_fields("price");
@@ -115,7 +119,8 @@ export default class ValantisApi {
 
   //Получаем необходимые данные с сервера при запуске прилодения
   static async init() {
-    this.getAllItems(0, 50);
+    //Запрашиваем 55 позиций за раз, а не 50, т.к некоторые позиции могут быть упразднены из за дублирования.
+    this.getAllItems(0, 55);
     this.getAllBrands();
     this.getAllPrices();
   }

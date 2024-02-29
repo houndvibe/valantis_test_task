@@ -6,6 +6,7 @@ class ProductStore {
   _status: string;
   _brands: string[];
   _prices: string[];
+  _length: number;
 
   constructor() {
     makeAutoObservable(this);
@@ -13,6 +14,7 @@ class ProductStore {
     this._status = "initial";
     this._brands = [];
     this._prices = [];
+    this._length = 0;
   }
 
   setProducts(products: ProductProps[]): void {
@@ -27,6 +29,9 @@ class ProductStore {
   setPrices(prices: string[]): void {
     this._prices = prices;
   }
+  setLength(length: number): void {
+    this._length = length;
+  }
 
   get products(): ProductProps[] {
     return this._products;
@@ -39,6 +44,9 @@ class ProductStore {
   }
   get status(): string {
     return this._status;
+  }
+  get length(): number {
+    return this._length;
   }
 }
 export default new ProductStore();
