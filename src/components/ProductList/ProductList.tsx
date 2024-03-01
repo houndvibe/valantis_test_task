@@ -17,14 +17,6 @@ const ProductList = observer(() => {
   );
 
   const [isTableFiltered, setIsTableFiltered] = useState(false);
-  /*   const [currentPage, setCurrentPage] = useState(1); */
-
-  /*   const handleChangePage = (page: number, pageSize: number) => {
-    if (page > currentPage) {
-      ValantisApi.upload(page * pageSize, pageSize * (page - currentPage));
-    }
-    setCurrentPage(page);
-  }; */
 
   const columns = [
     {

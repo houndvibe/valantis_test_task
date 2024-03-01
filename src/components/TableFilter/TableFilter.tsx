@@ -17,7 +17,7 @@ const TableFilter: React.FC<TableFilterProps> = ({
 
   const [filterType, setFilterType] = useState("");
 
-  const [priceFilter, setPriceFilter] = useState(0);
+  const [priceFilter, setPriceFilter] = useState(Math.min(...prices));
   const [productFilter, setProductFilter] = useState("");
   const [brandFilter, setBrandFilter] = useState("");
 
@@ -42,7 +42,7 @@ const TableFilter: React.FC<TableFilterProps> = ({
     setProductFilter("");
     setBrandFilter("");
     setPriceFilter(Math.min(...prices));
-    ValantisApi.getSomeItems(0, 50);
+    ValantisApi.init();
   };
 
   const handleSendFilterQuery = async () => {

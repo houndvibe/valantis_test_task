@@ -1,13 +1,6 @@
-import { getErrorMessage } from "../services/services";
+import { ValantisApiError, getErrorMessage } from "../services/services";
 import ProductStore from "../store/productsStore";
 import $axios_auth from "./interceptor";
-
-class ValantisApiError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "THIS IS VALANTIS API ERROR";
-  }
-}
 
 type ProductBrand = null | string;
 
@@ -99,24 +92,6 @@ export default class ValantisApi {
     }
   }
 
-  /*   static async upload(offset?: number, limit?: number) {
-    ProductStore.setStatus("loading");
-
-    const ids = await this.get_ids(offset, limit);
-    const data = await this.get_items(ids);
-
-    const x = ProductStore.products;
-
-    const y = x.concat(data).map((item, index) => {
-      return { ...item, index: index + 1 };
-    });
-
-    console.log(y);
-
-    ProductStore.setProducts(y);
-    ProductStore.setStatus("ok");
-  } */
-
   //метод, который позовляет получить фильтрованный массив с продуктами
   static async getFilteredItems(params: FilterParams) {
     try {
@@ -140,14 +115,12 @@ export default class ValantisApi {
   static async getAllBrands() {
     try {
       const brands = await ValantisApi.get_fields("brand");
-
       const filtered = brands.filter((item: string | null) => item);
 
       const set = new Set();
       for (const item of filtered) {
         set.add(item);
       }
-
       const uniqueItems: string[] = Array.from(set.values()) as string[];
 
       ProductStore.setLength(brands.length);
@@ -183,7 +156,7 @@ export default class ValantisApi {
   //Метод для получения необоходимых данных с сервера при запуске приложения.
   static async init() {
     //Запрашиваем 55 позиций за раз, а не 50, т.к некоторые позиции могут быть упразнены из за дублирования.
-    this.getSomeItems(0, 50);
+    this.getSomeItems();
     this.getAllBrands();
     this.getAllPrices();
   }

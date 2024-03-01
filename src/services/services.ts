@@ -33,6 +33,13 @@ export const processTableData = (items: ProductProps[]) => {
   return indexed;
 };
 
+export class ValantisApiError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "THIS IS VALANTIS API ERROR";
+  }
+}
+
 export const getErrorMessage = (error: unknown): string => {
   let message: string;
   if (error instanceof Error) {

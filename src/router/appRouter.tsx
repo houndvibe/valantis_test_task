@@ -8,7 +8,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <>ErrorPage</>,
+    errorElement: <>Something went wrong...</>,
     children: [
       {
         path: "info",
@@ -17,7 +17,7 @@ const router = createBrowserRouter([
             <InfoPage />
           </Suspense>
         ),
-        errorElement: <>ErrorPage</>,
+        errorElement: <>Something went wrong...</>,
       },
       {
         path: "products",
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
             <ProductsPage />
           </Suspense>
         ),
-        errorElement: <>ErrorPage</>,
+        errorElement: <>Something went wrong...</>,
       },
     ],
   },
