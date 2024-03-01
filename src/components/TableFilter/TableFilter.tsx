@@ -3,9 +3,17 @@ import productsStore from "../../store/productsStore";
 import ValantisApi from "../../api/valantisApi";
 import { useState } from "react";
 
-const TableFilter = () => {
+interface TableFilterProps {
+  isTableFiltered: boolean;
+  onFilter: (value: boolean) => void;
+}
+
+const TableFilter: React.FC<TableFilterProps> = ({
+  onFilter: setIsTableFiltered,
+  isTableFiltered,
+}) => {
   const brands = productsStore.brands;
-  const prices = productsStore.prices.map((price) => +price);
+  const prices = productsStore.prices;
 
   const [filterType, setFilterType] = useState("");
 
@@ -16,19 +24,25 @@ const TableFilter = () => {
   const handleChangeFilterType = (value: string) => {
     setFilterType(value);
   };
-
-  const handleChangePriceFilter = (price: number | null) => {
-    setPriceFilter(+price!);
-  };
-
   const handleChangeBrandFilter = (brand: string) => {
     setBrandFilter(brand);
+  };
+  const handleChangePriceFilter = (value: number | null) => {
+    setPriceFilter(value!);
   };
 
   const handleChangeProductFilter = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setProductFilter(e.target.value);
+  };
+
+  const handleResetFilter = () => {
+    setFilterType("");
+    setProductFilter("");
+    setBrandFilter("");
+    setPriceFilter(Math.min(...prices));
+    ValantisApi.getSomeItems(0, 50);
   };
 
   const handleSendFilterQuery = async () => {
@@ -43,6 +57,8 @@ const TableFilter = () => {
       filterType,
       filterQuery: filterQuery,
     });
+
+    setIsTableFiltered(true);
   };
 
   return (
@@ -50,6 +66,7 @@ const TableFilter = () => {
       <Select
         defaultValue={filterType}
         style={{ width: 120 }}
+        value={filterType}
         onChange={handleChangeFilterType}
         options={[
           { value: "product", label: "Product" },
@@ -60,6 +77,7 @@ const TableFilter = () => {
       Значение:
       {filterType == "brand" ? (
         <Select
+          value={brandFilter}
           style={{ width: 120 }}
           options={brands.map((brand) => {
             return { value: brand, label: brand };
@@ -68,18 +86,25 @@ const TableFilter = () => {
         />
       ) : filterType == "price" ? (
         <InputNumber
+          value={priceFilter}
           min={Math.min(...prices)}
           max={Math.max(...prices)}
+          defaultValue={Math.min(...prices)}
           onChange={handleChangePriceFilter}
+          onBlur={() => !priceFilter && setPriceFilter(Math.min(...prices))}
         />
       ) : (
         <Input
-          style={{ width: 120 }}
           value={productFilter}
+          placeholder="Золотое кольцо..."
+          style={{ width: 120 }}
           onChange={handleChangeProductFilter}
         />
       )}
       <Button onClick={handleSendFilterQuery}>Filter</Button>
+      {isTableFiltered ? (
+        <Button onClick={handleResetFilter}>Reset Filter</Button>
+      ) : null}
     </Flex>
   );
 };

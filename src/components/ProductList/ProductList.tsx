@@ -5,12 +5,26 @@ import productsStore from "../../store/productsStore";
 import { processTableData } from "../../services/services";
 import { TableProductProps } from "../../api/valantisApi";
 import TableFilter from "../TableFilter/TableFilter";
+import { useMemo, useState } from "react";
 
 const ProductList = observer(() => {
   const products = productsStore.products;
   const loadingStatus = productsStore.status;
   const length = productsStore.length;
-  const processedTableData = processTableData(products);
+  const processedTableData = useMemo(
+    () => processTableData(products),
+    [products]
+  );
+
+  const [isTableFiltered, setIsTableFiltered] = useState(false);
+  /*   const [currentPage, setCurrentPage] = useState(1); */
+
+  /*   const handleChangePage = (page: number, pageSize: number) => {
+    if (page > currentPage) {
+      ValantisApi.upload(page * pageSize, pageSize * (page - currentPage));
+    }
+    setCurrentPage(page);
+  }; */
 
   const columns = [
     {
@@ -57,14 +71,21 @@ const ProductList = observer(() => {
         <div className={classes.thead}>Запрашиваем данные...</div>
       )}
       <Table
-        title={() => <TableFilter />}
+        title={() => (
+          <TableFilter
+            onFilter={setIsTableFiltered}
+            isTableFiltered={isTableFiltered}
+          />
+        )}
         loading={loadingStatus === "ok" ? false : true}
         dataSource={processedTableData}
         columns={columns}
         pagination={{
+          showSizeChanger: false,
           position: ["topCenter", "bottomCenter"],
           total: length,
           defaultPageSize: 50,
+          /*          onChange: handleChangePage, */
         }}
       />
     </div>

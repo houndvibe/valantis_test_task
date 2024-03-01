@@ -5,7 +5,7 @@ class ProductStore {
   _products: ProductProps[] | [];
   _status: string;
   _brands: string[];
-  _prices: string[];
+  _prices: number[];
   _length: number;
 
   constructor() {
@@ -26,7 +26,7 @@ class ProductStore {
   setBrands(brands: string[]): void {
     this._brands = brands;
   }
-  setPrices(prices: string[]): void {
+  setPrices(prices: number[]): void {
     this._prices = prices;
   }
   setLength(length: number): void {
@@ -36,7 +36,7 @@ class ProductStore {
   get products(): ProductProps[] {
     return this._products;
   }
-  get prices(): string[] {
+  get prices(): number[] {
     return this._prices;
   }
   get brands(): string[] {

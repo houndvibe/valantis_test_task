@@ -8,7 +8,7 @@ export const getFormattedTimestamp = (currentDate: Date) => {
   return year + month + day;
 };
 
-//приводим полученные с сервера данные у необходимому виду
+//приводим полученные с сервера данные к необходимому виду
 export const processTableData = (items: ProductProps[]) => {
   //удаляем дубли по id
   const map = new Map();
@@ -17,9 +17,10 @@ export const processTableData = (items: ProductProps[]) => {
       map.set(item.id, { ...item });
     }
   }
+
   const uniqueItems = Array.from(map.values());
 
-  //добавляем индексы, key для итерации строк в реакте 
+  //добавляем индексы, key для итерации строк в реакте
   const indexed = uniqueItems?.map((item, index) => {
     return {
       ...item,
@@ -30,4 +31,19 @@ export const processTableData = (items: ProductProps[]) => {
   });
 
   return indexed;
+};
+
+export const getErrorMessage = (error: unknown): string => {
+  let message: string;
+  if (error instanceof Error) {
+    message = error.message;
+  } else if (error && typeof error === "object" && "message" in error) {
+    message = String(error.message);
+  } else if (typeof error === "string") {
+    message = error;
+  } else {
+    message = "Something went wrong";
+  }
+
+  return message + "; SENDING ANOTHER REQUEST...";
 };
