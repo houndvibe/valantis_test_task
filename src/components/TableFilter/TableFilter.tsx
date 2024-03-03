@@ -2,6 +2,7 @@ import { Button, Flex, Input, InputNumber, Select } from "antd";
 import productsStore from "../../store/productsStore";
 import ValantisApi from "../../api/valantisApi";
 import { useState } from "react";
+import { getFilterErrorMessage } from "../../services/services";
 
 interface TableFilterProps {
   isTableFiltered: boolean;
@@ -20,6 +21,7 @@ const TableFilter: React.FC<TableFilterProps> = ({
   const [priceFilter, setPriceFilter] = useState(Math.min(...prices));
   const [productFilter, setProductFilter] = useState("");
   const [brandFilter, setBrandFilter] = useState("");
+  const [errosMessage, setErrorMessage] = useState("");
 
   const handleChangeFilterType = (value: string) => {
     setFilterType(value);
@@ -42,7 +44,7 @@ const TableFilter: React.FC<TableFilterProps> = ({
     setProductFilter("");
     setBrandFilter("");
     setPriceFilter(Math.min(...prices));
-    ValantisApi.init();
+    setIsTableFiltered(false);
   };
 
   const handleSendFilterQuery = async () => {
@@ -53,16 +55,23 @@ const TableFilter: React.FC<TableFilterProps> = ({
         ? brandFilter
         : productFilter;
 
-    ValantisApi.getFilteredItems({
+    if (!filterType || !filterQuery) {
+      const message = getFilterErrorMessage(filterType, filterQuery);
+      setErrorMessage(message!);
+      return;
+    }
+
+    ValantisApi.getFilteredProducts({
       filterType,
       filterQuery: filterQuery,
     });
-
+    setErrorMessage("");
     setIsTableFiltered(true);
   };
 
   return (
     <Flex gap={"middle"}>
+      Тип:
       <Select
         defaultValue={filterType}
         style={{ width: 120 }}
@@ -105,6 +114,7 @@ const TableFilter: React.FC<TableFilterProps> = ({
       {isTableFiltered ? (
         <Button onClick={handleResetFilter}>Reset Filter</Button>
       ) : null}
+      {errosMessage ? <div style={{ color: "red" }}>{errosMessage}</div> : null}
     </Flex>
   );
 };

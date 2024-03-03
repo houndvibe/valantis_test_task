@@ -8,15 +8,22 @@ import TableFilter from "../TableFilter/TableFilter";
 import { useMemo, useState } from "react";
 
 const ProductList = observer(() => {
-  const products = productsStore.products;
   const loadingStatus = productsStore.status;
-  const length = productsStore.length;
+
+  const [isTableFiltered, setIsTableFiltered] = useState(false);
+
+  const products = isTableFiltered
+    ? productsStore.filteredProducts
+    : productsStore.products;
+
   const processedTableData = useMemo(
     () => processTableData(products),
     [products]
   );
 
-  const [isTableFiltered, setIsTableFiltered] = useState(false);
+  const handleToggleFilter = (bool: boolean) => {
+    setIsTableFiltered(bool);
+  };
 
   const columns = [
     {
@@ -65,7 +72,7 @@ const ProductList = observer(() => {
       <Table
         title={() => (
           <TableFilter
-            onFilter={setIsTableFiltered}
+            onFilter={handleToggleFilter}
             isTableFiltered={isTableFiltered}
           />
         )}
@@ -75,9 +82,8 @@ const ProductList = observer(() => {
         pagination={{
           showSizeChanger: false,
           position: ["topCenter", "bottomCenter"],
-          total: length,
+          total: processedTableData.length,
           defaultPageSize: 50,
-          /*          onChange: handleChangePage, */
         }}
       />
     </div>

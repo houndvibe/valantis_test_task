@@ -3,18 +3,18 @@ import { ProductProps } from "../api/valantisApi";
 
 class ProductStore {
   _products: ProductProps[] | [];
+  _filteredProducts: ProductProps[] | [];
   _status: string;
   _brands: string[];
   _prices: number[];
-  _length: number;
 
   constructor() {
     makeAutoObservable(this);
     this._products = [];
+    this._filteredProducts = [];
     this._status = "initial";
     this._brands = [];
     this._prices = [];
-    this._length = 0;
   }
 
   setProducts(products: ProductProps[]): void {
@@ -23,18 +23,21 @@ class ProductStore {
   setStatus(status: string): void {
     this._status = status;
   }
+  setFilteredProducts(products: ProductProps[]): void {
+    this._filteredProducts = products;
+  }
   setBrands(brands: string[]): void {
     this._brands = brands;
   }
   setPrices(prices: number[]): void {
     this._prices = prices;
   }
-  setLength(length: number): void {
-    this._length = length;
-  }
 
   get products(): ProductProps[] {
     return this._products;
+  }
+  get filteredProducts(): ProductProps[] {
+    return this._filteredProducts;
   }
   get prices(): number[] {
     return this._prices;
@@ -44,9 +47,6 @@ class ProductStore {
   }
   get status(): string {
     return this._status;
-  }
-  get length(): number {
-    return this._length;
   }
 }
 export default new ProductStore();

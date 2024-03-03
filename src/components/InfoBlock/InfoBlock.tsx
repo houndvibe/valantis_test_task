@@ -92,7 +92,9 @@ const InfoBlock: React.FC<InfoBlockProps> = ({ theme }) => {
             <p>
               Фильтрация, как и требовалось в задании, происходит не на клиенте,
               а на сервере, посредством метода
-              <span style={{ fontWeight: 600 }}> filter</span>,
+              <span style={{ fontWeight: 600 }}> filter</span>, При этом
+              нефильтрованные данные кэширутся, воизбежание повторной загрузки
+              при сбросе фильтра
             </p>
             <Divider />
             <p>

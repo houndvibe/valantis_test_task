@@ -75,7 +75,7 @@ export default class ValantisApi {
   }
 
   //метод, который позволяет получить массив с продуктами, с заданным отступом и лимитом
-  static async getSomeItems(offset?: number, limit?: number) {
+  static async getProducts(offset?: number, limit?: number) {
     try {
       ProductStore.setStatus("loading");
 
@@ -87,26 +87,25 @@ export default class ValantisApi {
     } catch (error: unknown) {
       console.error(error);
       setTimeout(() => {
-        this.getSomeItems(offset, limit);
+        this.getProducts(offset, limit);
       }, 1000);
     }
   }
 
   //метод, который позовляет получить фильтрованный массив с продуктами
-  static async getFilteredItems(params: FilterParams) {
+  static async getFilteredProducts(params: FilterParams) {
     try {
       ProductStore.setStatus("loading");
 
       const filteredIds = await this.filter(params);
       const data = await this.get_items(filteredIds);
 
-      ProductStore.setLength(data.length);
-      ProductStore.setProducts(data);
+      ProductStore.setFilteredProducts(data);
       ProductStore.setStatus("ok");
     } catch (error) {
       console.error(error);
       setTimeout(() => {
-        this.getFilteredItems(params);
+        this.getFilteredProducts(params);
       }, 1000);
     }
   }
@@ -123,7 +122,6 @@ export default class ValantisApi {
       }
       const uniqueItems: string[] = Array.from(set.values()) as string[];
 
-      ProductStore.setLength(brands.length);
       ProductStore.setBrands(uniqueItems);
     } catch (error) {
       console.error(error);
@@ -156,7 +154,7 @@ export default class ValantisApi {
   //Метод для получения необоходимых данных с сервера при запуске приложения.
   static async init() {
     //Запрашиваем 55 позиций за раз, а не 50, т.к некоторые позиции могут быть упразнены из за дублирования.
-    this.getSomeItems();
+    this.getProducts();
     this.getAllBrands();
     this.getAllPrices();
   }

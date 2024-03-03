@@ -20,7 +20,7 @@ export const processTableData = (items: ProductProps[]) => {
 
   const uniqueItems = Array.from(map.values());
 
-  //добавляем индексы, key для итерации строк в реакте
+  //добавляем индексы для нумерации и key для правильной react-итерации строк.
   const indexed = uniqueItems?.map((item, index) => {
     return {
       ...item,
@@ -40,6 +40,7 @@ export class ValantisApiError extends Error {
   }
 }
 
+//Формируем сообщение об ошибке
 export const getErrorMessage = (error: unknown): string => {
   let message: string;
   if (error instanceof Error) {
@@ -53,4 +54,20 @@ export const getErrorMessage = (error: unknown): string => {
   }
 
   return message + "; SENDING ANOTHER REQUEST...";
+};
+
+export const getFilterErrorMessage = (
+  filterType: string,
+  filterQuery: string | number
+) => {
+  if (!filterType) {
+    return "Выберите тип фильтра";
+  }
+
+  if (filterType === "brand" && !filterQuery) {
+    return "Укажите бренд ";
+  }
+  if (filterType === "product" && !filterQuery) {
+    return "Укажите наименование ";
+  }
 };
