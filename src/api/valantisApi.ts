@@ -2,6 +2,7 @@ import {
   ValantisApiError,
   getErrorMessage,
   reconnectOnError,
+  showError,
 } from "../services/services";
 import ProductStore from "../store/productsStore";
 import $axios_auth from "./interceptor";
@@ -89,7 +90,8 @@ export default class ValantisApi {
       ProductStore.setProducts(data);
       ProductStore.setStatus("ok");
     } catch (error: unknown) {
-      reconnectOnError(error, this.getProducts, offset, limit);
+      showError(error);
+      reconnectOnError(this.getProducts, offset, limit);
     }
   }
 
@@ -104,7 +106,8 @@ export default class ValantisApi {
       ProductStore.setFilteredProducts(data);
       ProductStore.setStatus("ok");
     } catch (error) {
-      reconnectOnError(error, this.getFilteredProducts, params);
+      showError(error);
+      reconnectOnError(this.getFilteredProducts, params);
     }
   }
 
@@ -122,7 +125,8 @@ export default class ValantisApi {
 
       ProductStore.setBrands(uniqueItems);
     } catch (error) {
-      reconnectOnError(error, this.getAllBrands);
+      showError(error);
+      reconnectOnError(this.getAllBrands);
     }
   }
 
@@ -139,7 +143,8 @@ export default class ValantisApi {
       const uniquePrices: number[] = Array.from(set.values()) as number[];
       ProductStore.setPrices(uniquePrices);
     } catch (error) {
-      reconnectOnError(error, this.getAllPrices);
+      showError(error);
+      reconnectOnError(this.getAllPrices);
     }
   }
 

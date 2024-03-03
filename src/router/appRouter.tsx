@@ -1,8 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
+import { Suspense } from "react";
 import App from "../pages/App/App";
 import InfoPage from "../pages/InfoPage";
 import ProductsPage from "../pages/ProductsPage/ProductsPage";
-import { Suspense } from "react";
 
 const router = createBrowserRouter([
   {

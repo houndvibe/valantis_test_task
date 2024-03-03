@@ -1,9 +1,9 @@
-import ProductList from "../../components/ProductList/ProductList";
+import ProductTable from "../../components/ProductTable/ProductTable";
 
 const ProductsPage = () => {
   return (
     <div>
-      <ProductList />
+      <ProductTable />
     </div>
   );
 };

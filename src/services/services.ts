@@ -1,4 +1,6 @@
 import ValantisApi, { FilterParams, ProductProps } from "../api/valantisApi";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 //////////Получаем форматированный таймштамп для авторизационного токена
 export const getFormattedTimestamp = (currentDate: Date) => {
@@ -8,9 +10,9 @@ export const getFormattedTimestamp = (currentDate: Date) => {
   return year + month + day;
 };
 
-//////////приводим полученные с сервера данные к необходимому виду
+//////////Приводим полученные с сервера данные к необходимому виду
 export const processTableData = (items: ProductProps[]) => {
-  //удаляем дубли по id
+  //Удаляем дубли по id
   const map = new Map();
   for (const item of items) {
     if (!map.has(item.id)) {
@@ -19,7 +21,7 @@ export const processTableData = (items: ProductProps[]) => {
   }
 
   const uniqueItems = Array.from(map.values());
-  //добавляем индексы для нумерации и key для правильной react-итерации строк.
+  //Добавляем индексы для нумерации и key для правильной react-итерации строк.
   const indexed = uniqueItems?.map((item, index) => {
     return {
       ...item,
@@ -32,10 +34,11 @@ export const processTableData = (items: ProductProps[]) => {
   return indexed;
 };
 
+//Заведем отдельный класс для ошибок api
 export class ValantisApiError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = "THIS IS VALANTIS API ERROR";
+    this.name = "ValantisApiError";
   }
 }
 
@@ -52,10 +55,10 @@ export const getErrorMessage = (error: unknown): string => {
     message = "Something went wrong";
   }
 
-  return message + "; SENDING ANOTHER REQUEST...";
+  return message + ". Sending another request...";
 };
 
-//////////Формируем сообщение о неуказанных параметрах фильтра
+//////////Формируем сообщение предупреждения о незаполненных параметрах фильтра
 export const getFilterErrorMessage = (
   filterType: string,
   filterQuery: string | number
@@ -72,19 +75,23 @@ export const getFilterErrorMessage = (
   }
 };
 
+//Функция, которая выводит ошибку в виде нотификации +  в консоль
+export const showError = (error: unknown) => {
+  console.error(error);
+  toast.error(`${error}`);
+};
+
 type ValantisApiAdditionalMethods =
   | ((offset?: number | undefined, limit?: number | undefined) => Promise<void>)
   | ((params: FilterParams) => Promise<void>)
   | (() => Promise<void>)
   | (() => Promise<void>);
 
-//метод для отправки повторного запрос при ошибке api
+//функция для отправки повторного запрос при ошибке api
 export const reconnectOnError = (
-  error: unknown,
   func: ValantisApiAdditionalMethods,
   ...rest: (number | FilterParams | undefined)[]
 ) => {
-  console.error(error);
   const bound = func.bind(ValantisApi, ...rest);
   setTimeout(() => {
     bound();

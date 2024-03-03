@@ -15,12 +15,13 @@ const TableFilter: React.FC<TableFilterProps> = ({
 }) => {
   const brands = productsStore.brands;
   const prices = productsStore.prices;
+  const [minPrice, maxPrice] = [Math.min(...prices), Math.max(...prices)];
 
   const [filterType, setFilterType] = useState("");
 
   const [brandFilter, setBrandFilter] = useState("");
   const [productFilter, setProductFilter] = useState("");
-  const [priceFilter, setPriceFilter] = useState(Math.min(...prices));
+  const [priceFilter, setPriceFilter] = useState(minPrice);
 
   const [errosMessage, setErrorMessage] = useState("");
 
@@ -42,11 +43,17 @@ const TableFilter: React.FC<TableFilterProps> = ({
     setFilterType(value);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
+    if (e.key === "Enter") {
+      handleSendFilterQuery();
+    }
+  };
+
   const handleResetFilter = () => {
     setFilterType("");
     setProductFilter("");
     setBrandFilter("");
-    setPriceFilter(Math.min(...prices));
+    setPriceFilter(minPrice);
     setIsTableFiltered(false);
   };
 
@@ -78,14 +85,15 @@ const TableFilter: React.FC<TableFilterProps> = ({
       Тип:
       <Select
         defaultValue={filterType}
-        style={{ width: 120 }}
         value={filterType}
-        onChange={handleChangeFilterType}
+        style={{ width: 120 }}
         options={[
           { value: "product", label: "Product" },
           { value: "brand", label: "Brand" },
           { value: "price", label: "Price" },
         ]}
+        onChange={handleChangeFilterType}
+        onKeyDown={handleKeyDown}
       />
       Значение:
       {filterType == "brand" ? (
@@ -96,22 +104,25 @@ const TableFilter: React.FC<TableFilterProps> = ({
             return { value: brand, label: brand };
           })}
           onChange={handleChangeBrandFilter}
+          onKeyDown={handleKeyDown}
         />
       ) : filterType == "price" ? (
         <InputNumber
+          defaultValue={minPrice}
           value={priceFilter}
-          min={Math.min(...prices)}
-          max={Math.max(...prices)}
-          defaultValue={Math.min(...prices)}
+          min={minPrice}
+          max={maxPrice}
           onChange={handleChangePriceFilter}
-          onBlur={() => !priceFilter && setPriceFilter(Math.min(...prices))}
+          onKeyDown={handleKeyDown}
+          onBlur={() => !priceFilter && setPriceFilter(minPrice)}
         />
       ) : (
         <Input
           value={productFilter}
-          placeholder="Золотое кольцо..."
           style={{ width: 120 }}
+          placeholder="Золотое кольцо..."
           onChange={handleChangeProductFilter}
+          onKeyDown={handleKeyDown}
         />
       )}
       <Button onClick={handleSendFilterQuery}>Filter</Button>

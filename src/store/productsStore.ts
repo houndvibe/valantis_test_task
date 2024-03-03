@@ -1,30 +1,26 @@
 import { makeAutoObservable } from "mobx";
 import { ProductProps } from "../api/valantisApi";
 
+type DataLoadingStatus = "ok" | "loading";
+
 class ProductStore {
-  _products: ProductProps[] | [];
-  _filteredProducts: ProductProps[] | [];
-  _status: string;
+  _status: DataLoadingStatus;
   _brands: string[];
   _prices: number[];
+  _products: ProductProps[] | [];
+  _filteredProducts: ProductProps[] | [];
 
   constructor() {
     makeAutoObservable(this);
-    this._products = [];
-    this._filteredProducts = [];
-    this._status = "initial";
+    this._status = "ok";
     this._brands = [];
     this._prices = [];
+    this._products = [];
+    this._filteredProducts = [];
   }
 
-  setProducts(products: ProductProps[]): void {
-    this._products = products;
-  }
-  setStatus(status: string): void {
+  setStatus(status: DataLoadingStatus): void {
     this._status = status;
-  }
-  setFilteredProducts(products: ProductProps[]): void {
-    this._filteredProducts = products;
   }
   setBrands(brands: string[]): void {
     this._brands = brands;
@@ -32,21 +28,28 @@ class ProductStore {
   setPrices(prices: number[]): void {
     this._prices = prices;
   }
+  setProducts(products: ProductProps[]): void {
+    this._products = products;
+  }
+  setFilteredProducts(products: ProductProps[]): void {
+    this._filteredProducts = products;
+  }
 
+  get status(): string {
+    return this._status;
+  }
+  get brands(): string[] {
+    return this._brands;
+  }
+  get prices(): number[] {
+    return this._prices;
+  }
   get products(): ProductProps[] {
     return this._products;
   }
   get filteredProducts(): ProductProps[] {
     return this._filteredProducts;
   }
-  get prices(): number[] {
-    return this._prices;
-  }
-  get brands(): string[] {
-    return this._brands;
-  }
-  get status(): string {
-    return this._status;
-  }
 }
+
 export default new ProductStore();

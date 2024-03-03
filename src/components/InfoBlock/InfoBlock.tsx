@@ -1,28 +1,19 @@
 import { Divider, Flex } from "antd";
-import React from "react";
 import classes from "./InfoBlock.module.scss";
+import BoldText from "../BoldText/BoldText";
 
-interface InfoBlockProps {
-  theme: string;
-}
-
-const InfoBlock: React.FC<InfoBlockProps> = ({ theme }) => {
+const InfoBlock = ({ theme }: { theme: string }) => {
   return (
     <div>
       {theme == "me" ? (
         <Flex vertical className={classes.info}>
           <div>Обо мне:</div>
-
           <Flex vertical className={classes.about + " " + classes.me}>
             <p>Артем, 29 лет</p>
-
             <Divider />
-
             <p>Telegram : https://t.me/ArtemlyTG</p>
             <p> E-Mail : houndvibe@gmail.com</p>
-
             <Divider />
-
             <p>Мои навыки:</p>
             <p>● React, React-Router v5/6, Redux Toolkit/RTK Query/MobX.</p>
             <p>● TypeScript.</p>
@@ -45,9 +36,7 @@ const InfoBlock: React.FC<InfoBlockProps> = ({ theme }) => {
             <p>● Опыт работы с Vue.js.</p>
             <p>● Figma/Slack/Asana/Jira/Trello.</p>
             <p>● Работа с контролем версий GitHub/GitLab.</p>
-
             <Divider />
-
             <p> Из интересного:</p>
             <p>● Есть опыт разработки личного кабинета и систем авторизации.</p>
             <p>● Разрабатывал текстовый редактора на фреймворке Draft.js </p>
@@ -69,39 +58,40 @@ const InfoBlock: React.FC<InfoBlockProps> = ({ theme }) => {
             <p>
               Обращение к серверу происходит при помощи статичиских методов
               класса
-              <span style={{ fontWeight: 600 }}> ValantisApi</span>, которые
-              внутри себя используют{" "}
-              <span style={{ fontWeight: 600 }}> $axios_auth</span>
+              <BoldText> ValantisApi</BoldText>, которые внутри себя используют
+              <BoldText> $axios_auth</BoldText>
             </p>
             <Divider />
             <p>
-              <span style={{ fontWeight: 600 }}> $axios_auth</span> - это
-              инстанс
-              <span style={{ fontWeight: 600 }}> axios</span>, в который
-              интерсептором передан автаризационный зоголовок
+              <BoldText> $axios_auth</BoldText> - это инстанс
+              <BoldText> axios</BoldText>, в который интерсептором передан
+              автаризационный зоголовок
             </p>
             <Divider />
             <p>
-              При ошибках api в консоль пробрасывается инстанс{" "}
-              <span style={{ fontWeight: 600 }}> ValantisApiError</span> с
-              сообщением об ошибке, а через 1сек отправляется новый запрос.
-              Пауза в 1 секунду сделана на случай потери интернет соединения, во
-              избежание бксконенчой цикличной отправки запросов
+              При ошибках api сообщение об ошибке выводится в консоль. Так же, в
+              правом верзнем углу экрана всплывает
+              <BoldText> React-toastify нотификация</BoldText> с текстом ошибки.
+            </p>
+            <Divider />
+            <p>
+              Через 1.5сек после ошибки посредством функции
+              <BoldText>reconnect</BoldText> отправляется новый запрос. Пауза в
+              1.5сек сделана на случай потери интернет соединения, во избежание
+              бксконенчой цикличной отправки запросов
             </p>
             <Divider />
             <p>
               Фильтрация, как и требовалось в задании, происходит не на клиенте,
-              а на сервере, посредством метода
-              <span style={{ fontWeight: 600 }}> filter</span>, При этом
-              нефильтрованные данные кэширутся, воизбежание повторной загрузки
-              при сбросе фильтра
+              а на сервере, посредством метода <BoldText> filter</BoldText>, При
+              этом нефильтрованные данные кэширутся, воизбежание повторной
+              загрузки при сбросе фильтра
             </p>
             <Divider />
             <p>
-              Для фронтенда использовал библиотеку{" "}
-              <span style={{ fontWeight: 600 }}>antd</span>, Дополнительно
-              стилизовал элементы при помощи{" "}
-              <span style={{ fontWeight: 600 }}>scss modules</span>
+              Для фронтенда использовал библиотеку <BoldText>antd</BoldText>,
+              Дополнительно стилизовал элементы при помощи
+              <BoldText>scss modules</BoldText>
             </p>
             <Divider />
             <p>Некоторые более подробные коментарии можно найти в коде</p>
@@ -115,7 +105,8 @@ const InfoBlock: React.FC<InfoBlockProps> = ({ theme }) => {
             <p>6. Axios 1.6</p>
             <p>7. sass 1.71.1</p>
             <p>8. antd 5.14.2</p>
-            <p>9. md5 2.3.0</p>
+            <p>9. ReactToastify 10 </p>
+            <p>10. md5 2.3.0</p>
           </Flex>
         </Flex>
       ) : null}

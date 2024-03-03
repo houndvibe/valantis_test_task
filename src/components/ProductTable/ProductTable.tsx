@@ -1,4 +1,4 @@
-import classes from "./ProductList.module.scss";
+import classes from "./ProductTable.module.scss";
 import { Table } from "antd";
 import { observer } from "mobx-react-lite";
 import productsStore from "../../store/productsStore";
@@ -7,7 +7,7 @@ import { TableProductProps } from "../../api/valantisApi";
 import TableFilter from "../TableFilter/TableFilter";
 import { useMemo, useState } from "react";
 
-const ProductList = observer(() => {
+const ProductTable = observer(() => {
   const loadingStatus = productsStore.status;
 
   const [isTableFiltered, setIsTableFiltered] = useState(false);
@@ -20,10 +20,6 @@ const ProductList = observer(() => {
     () => processTableData(products),
     [products]
   );
-
-  const handleToggleFilter = (bool: boolean) => {
-    setIsTableFiltered(bool);
-  };
 
   const columns = [
     {
@@ -65,14 +61,14 @@ const ProductList = observer(() => {
   ];
 
   return (
-    <div className={classes.list}>
+    <div className={classes.table}>
       {loadingStatus !== "ok" && (
         <div className={classes.thead}>Запрашиваем данные...</div>
       )}
       <Table
         title={() => (
           <TableFilter
-            onFilter={handleToggleFilter}
+            onFilter={setIsTableFiltered}
             isTableFiltered={isTableFiltered}
           />
         )}
@@ -80,9 +76,7 @@ const ProductList = observer(() => {
         dataSource={processedTableData}
         columns={columns}
         pagination={{
-          showSizeChanger: false,
           position: ["topCenter", "bottomCenter"],
-          total: processedTableData.length,
           defaultPageSize: 50,
         }}
       />
@@ -90,4 +84,4 @@ const ProductList = observer(() => {
   );
 });
 
-export default ProductList;
+export default ProductTable;
