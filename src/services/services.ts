@@ -1,6 +1,6 @@
-import { ProductProps } from "../api/valantisApi";
+import ValantisApi, { FilterParams, ProductProps } from "../api/valantisApi";
 
-//Получаем форматированный таймштамп для авторизационного токена
+//////////Получаем форматированный таймштамп для авторизационного токена
 export const getFormattedTimestamp = (currentDate: Date) => {
   const year = currentDate.getUTCFullYear();
   const month = (currentDate.getUTCMonth() + 1).toString().padStart(2, "0");
@@ -8,7 +8,7 @@ export const getFormattedTimestamp = (currentDate: Date) => {
   return year + month + day;
 };
 
-//приводим полученные с сервера данные к необходимому виду
+//////////приводим полученные с сервера данные к необходимому виду
 export const processTableData = (items: ProductProps[]) => {
   //удаляем дубли по id
   const map = new Map();
@@ -19,7 +19,6 @@ export const processTableData = (items: ProductProps[]) => {
   }
 
   const uniqueItems = Array.from(map.values());
-
   //добавляем индексы для нумерации и key для правильной react-итерации строк.
   const indexed = uniqueItems?.map((item, index) => {
     return {
@@ -40,7 +39,7 @@ export class ValantisApiError extends Error {
   }
 }
 
-//Формируем сообщение об ошибке
+//////////Формируем сообщение об ошибке api
 export const getErrorMessage = (error: unknown): string => {
   let message: string;
   if (error instanceof Error) {
@@ -56,6 +55,7 @@ export const getErrorMessage = (error: unknown): string => {
   return message + "; SENDING ANOTHER REQUEST...";
 };
 
+//////////Формируем сообщение о неуказанных параметрах фильтра
 export const getFilterErrorMessage = (
   filterType: string,
   filterQuery: string | number
@@ -70,4 +70,23 @@ export const getFilterErrorMessage = (
   if (filterType === "product" && !filterQuery) {
     return "Укажите наименование ";
   }
+};
+
+type ValantisApiAdditionalMethods =
+  | ((offset?: number | undefined, limit?: number | undefined) => Promise<void>)
+  | ((params: FilterParams) => Promise<void>)
+  | (() => Promise<void>)
+  | (() => Promise<void>);
+
+//метод для отправки повторного запрос при ошибке api
+export const reconnectOnError = (
+  error: unknown,
+  func: ValantisApiAdditionalMethods,
+  ...rest: (number | FilterParams | undefined)[]
+) => {
+  console.error(error);
+  const bound = func.bind(ValantisApi, ...rest);
+  setTimeout(() => {
+    bound();
+  }, 1500);
 };

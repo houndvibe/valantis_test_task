@@ -1,4 +1,8 @@
-import { ValantisApiError, getErrorMessage } from "../services/services";
+import {
+  ValantisApiError,
+  getErrorMessage,
+  reconnectOnError,
+} from "../services/services";
 import ProductStore from "../store/productsStore";
 import $axios_auth from "./interceptor";
 
@@ -16,7 +20,7 @@ export interface TableProductProps extends ProductProps {
   index: number;
 }
 
-interface FilterParams {
+export interface FilterParams {
   filterType: string;
   filterQuery: string | number;
 }
@@ -85,10 +89,7 @@ export default class ValantisApi {
       ProductStore.setProducts(data);
       ProductStore.setStatus("ok");
     } catch (error: unknown) {
-      console.error(error);
-      setTimeout(() => {
-        this.getProducts(offset, limit);
-      }, 1000);
+      reconnectOnError(error, this.getProducts, offset, limit);
     }
   }
 
@@ -103,10 +104,7 @@ export default class ValantisApi {
       ProductStore.setFilteredProducts(data);
       ProductStore.setStatus("ok");
     } catch (error) {
-      console.error(error);
-      setTimeout(() => {
-        this.getFilteredProducts(params);
-      }, 1000);
+      reconnectOnError(error, this.getFilteredProducts, params);
     }
   }
 
@@ -124,10 +122,7 @@ export default class ValantisApi {
 
       ProductStore.setBrands(uniqueItems);
     } catch (error) {
-      console.error(error);
-      setTimeout(() => {
-        this.getAllBrands();
-      }, 1000);
+      reconnectOnError(error, this.getAllBrands);
     }
   }
 
@@ -144,16 +139,12 @@ export default class ValantisApi {
       const uniquePrices: number[] = Array.from(set.values()) as number[];
       ProductStore.setPrices(uniquePrices);
     } catch (error) {
-      console.error(error);
-      setTimeout(() => {
-        this.getAllPrices();
-      }, 1000);
+      reconnectOnError(error, this.getAllPrices);
     }
   }
 
   //Метод для получения необоходимых данных с сервера при запуске приложения.
   static async init() {
-    //Запрашиваем 55 позиций за раз, а не 50, т.к некоторые позиции могут быть упразнены из за дублирования.
     this.getProducts();
     this.getAllBrands();
     this.getAllPrices();

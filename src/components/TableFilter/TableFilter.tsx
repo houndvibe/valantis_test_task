@@ -18,25 +18,28 @@ const TableFilter: React.FC<TableFilterProps> = ({
 
   const [filterType, setFilterType] = useState("");
 
-  const [priceFilter, setPriceFilter] = useState(Math.min(...prices));
-  const [productFilter, setProductFilter] = useState("");
   const [brandFilter, setBrandFilter] = useState("");
-  const [errosMessage, setErrorMessage] = useState("");
+  const [productFilter, setProductFilter] = useState("");
+  const [priceFilter, setPriceFilter] = useState(Math.min(...prices));
 
-  const handleChangeFilterType = (value: string) => {
-    setFilterType(value);
-  };
-  const handleChangeBrandFilter = (brand: string) => {
-    setBrandFilter(brand);
-  };
-  const handleChangePriceFilter = (value: number | null) => {
-    setPriceFilter(value!);
-  };
+  const [errosMessage, setErrorMessage] = useState("");
 
   const handleChangeProductFilter = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setProductFilter(e.target.value);
+  };
+
+  const handleChangePriceFilter = (value: number | null) => {
+    setPriceFilter(value!);
+  };
+
+  const handleChangeBrandFilter = (brand: string) => {
+    setBrandFilter(brand);
+  };
+
+  const handleChangeFilterType = (value: string) => {
+    setFilterType(value);
   };
 
   const handleResetFilter = () => {
@@ -65,6 +68,7 @@ const TableFilter: React.FC<TableFilterProps> = ({
       filterType,
       filterQuery: filterQuery,
     });
+
     setErrorMessage("");
     setIsTableFiltered(true);
   };
