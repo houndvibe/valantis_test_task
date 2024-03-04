@@ -1,30 +1,42 @@
-# React + TypeScript + Vite
+# Valantis_test_task
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Липатов А.С
+Ссылка на рабочую версию: **https://houndvibe.github.io/valantis_test_task/**
 
-Currently, two official plugins are available:
+Обращение к серверу происходит при помощи статичиских методов класса **ValantisApi**, которые внутри себя используют **$axios_auth**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**$axios_auth** - это инстанс **axios**, в который интерсептором передан автаризационный зоголовок.
 
-## Expanding the ESLint configuration
+При ошибках api сообщение об ошибке выводится в консоль. Так же, в правом нижнем углу экрана всплывает **react-toastify** нотификация с текстом ошибки.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Через 1.5сек после ошибки посредством функции **reconnect** отправляется новый запрос. Пауза в 1.5сек сделана на случай потери интернет-соединения, во избежание цикличной отправки огромного количества запросов.
 
-- Configure the top-level `parserOptions` property like this:
+Фильтрация, как и требовалось в задании, происходит не на клиенте, а на сервере, посредством метода **filter**. При этом нефильтрованные данные кэширутся, во избежание повторной их загрузки при сбросе фильтра.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module",
-    project: ["./tsconfig.json", "./tsconfig.node.json"],
-    tsconfigRootDir: __dirname,
-  },
-};
-```
+Для фронтенда использовал библиотеку **antd**, Дополнительно стилизовал элементы при помощи **scss modules**.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Некоторые более подробные коментарии можно найти в коде.
+
+Буду рад лично ответить на любые вопросы.
+
+## Использованные инструменты:
+
+1. React 18.2.0
+
+2. TypeScript 5.2.2
+
+3. ReactRouter 6.2
+
+4. MobX 6.12
+
+5. Vite 5.1.4
+
+6. axios 1.6
+
+7. sass 1.71.1
+
+8. antd 5.14.2
+
+9. toastify 10.0.4
+
+10. md5 2.3.0

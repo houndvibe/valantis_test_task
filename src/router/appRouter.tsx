@@ -4,8 +4,6 @@ import App from "../pages/App/App";
 import InfoPage from "../pages/InfoPage";
 import ProductsPage from "../pages/ProductsPage/ProductsPage";
 
-console.log(import.meta.env.BASE_URL);
-
 const router = createBrowserRouter(
   [
     {

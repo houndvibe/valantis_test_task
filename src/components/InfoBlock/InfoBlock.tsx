@@ -91,22 +91,26 @@ const InfoBlock = ({ theme }: { theme: string }) => {
             <p>
               Для фронтенда использовал библиотеку <BoldText>antd</BoldText>,
               Дополнительно стилизовал элементы при помощи
-              <BoldText>scss modules</BoldText>.
+              <BoldText> scss modules</BoldText>.
             </p>
             <Divider />
             <p>Некоторые более подробные коментарии можно найти в коде.</p>
             <Divider />
-            <p>Использованные инструменты:</p>
-            <p>1. React 18.2.0</p>
-            <p>2. TypeScript 5.2.2</p>
-            <p>3. ReactRouter 6.2</p>
-            <p>4. MobX 6.12</p>
-            <p>5. Vite 5.1.4</p>
-            <p>6. Axios 1.6</p>
-            <p>7. sass 1.71.1</p>
-            <p>8. antd 5.14.2</p>
-            <p>9. ReactToastify 10 </p>
-            <p>10. md5 2.3.0</p>
+            <p>Буду рад лично ответить на любые вопросы.</p>
+            <Divider />
+            <p>
+              <BoldText>Использованные инструменты:</BoldText>
+            </p>
+            <p># React 18.2.0</p>
+            <p># TypeScript 5.2.2</p>
+            <p># ReactRouter 6.2</p>
+            <p># MobX 6.12</p>
+            <p># Vite 5.1.4</p>
+            <p># axios 1.6</p>
+            <p># sass 1.71.1</p>
+            <p># antd 5.14.2</p>
+            <p># toastify 10.0.4 </p>
+            <p># md5 2.3.0</p>
           </Flex>
         </Flex>
       ) : null}
