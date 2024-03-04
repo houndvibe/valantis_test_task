@@ -8,7 +8,7 @@ const FORMATTED_TIMESTAMP = getFormattedTimestamp(new Date());
 const AUTH_TOKEN = md5(`${PASSWORD}_${FORMATTED_TIMESTAMP}`);
 
 export const $axios_auth = axios.create({
-  baseURL: "http://api.valantis.store:40000/",
+  baseURL: "https://api.valantis.store:41000/",
 });
 
 //добавляем запросам авторизационный заголовок
