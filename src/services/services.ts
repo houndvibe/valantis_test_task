@@ -19,19 +19,19 @@ export const processTableData = (items: ProductProps[]) => {
       map.set(item.id, { ...item });
     }
   }
+  const uniqueProducts = Array.from(map.values());
 
-  const uniqueItems = Array.from(map.values());
   //Добавляем индексы для нумерации и key для правильной react-итерации строк.
-  const indexed = uniqueItems?.map((item, index) => {
+  const processedProductsData = uniqueProducts?.map((product, index) => {
     return {
-      ...item,
-      brand: item.brand || "-",
+      ...product,
+      brand: product.brand || "-",
       index: index + 1,
-      key: item.id,
+      key: product.id,
     };
   });
 
-  return indexed;
+  return processedProductsData;
 };
 
 //Заведем отдельный класс для ошибок api
@@ -44,16 +44,14 @@ export class ValantisApiError extends Error {
 
 //////////Формируем сообщение об ошибке api
 export const getErrorMessage = (error: unknown): string => {
-  let message: string;
-  if (error instanceof Error) {
-    message = error.message;
-  } else if (error && typeof error === "object" && "message" in error) {
-    message = String(error.message);
-  } else if (typeof error === "string") {
-    message = error;
-  } else {
-    message = "Something went wrong";
-  }
+  const message: string =
+    error instanceof Error
+      ? error.message
+      : error && typeof error === "object" && "message" in error
+      ? String(error.message)
+      : typeof error === "string"
+      ? error
+      : "Something went wrong";
 
   return message + ". Sending another request...";
 };
@@ -63,22 +61,19 @@ export const getFilterErrorMessage = (
   filterType: string,
   filterQuery: string | number
 ) => {
-  if (!filterType) {
-    return "Выберите тип фильтра";
-  }
-
-  if (filterType === "brand" && !filterQuery) {
-    return "Укажите бренд ";
-  }
-  if (filterType === "product" && !filterQuery) {
-    return "Укажите наименование ";
-  }
+  return !filterType
+    ? "Выберите тип фильтра"
+    : filterType === "brand" && !filterQuery
+    ? "Укажите бренд "
+    : filterType === "product" && !filterQuery
+    ? "Укажите наименование "
+    : "";
 };
 
 //Функция, которая выводит ошибку в виде нотификации +  в консоль
 export const showError = (error: unknown) => {
-  console.error(error);
   toast.error(`${error}`);
+  console.error(error);
 };
 
 type ValantisApiAdditionalMethods =

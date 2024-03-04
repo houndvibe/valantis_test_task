@@ -1,9 +1,10 @@
 import { ToastContainer } from "react-toastify";
 
+//Обертка для контейнера toastify (используется для визуального отображения ошибок Api, помимо консоли)
 const AppNotificationContainer = () => {
   return (
     <ToastContainer
-      position="top-right"
+      position="bottom-right"
       autoClose={5000}
       hideProgressBar={true}
       newestOnTop={false}

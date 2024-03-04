@@ -1,10 +1,8 @@
 import { makeAutoObservable } from "mobx";
 import { ProductProps } from "../api/valantisApi";
 
-type DataLoadingStatus = "ok" | "loading";
-
 class ProductStore {
-  _status: DataLoadingStatus;
+  _isLoading: boolean;
   _brands: string[];
   _prices: number[];
   _products: ProductProps[] | [];
@@ -12,15 +10,15 @@ class ProductStore {
 
   constructor() {
     makeAutoObservable(this);
-    this._status = "ok";
+    this._isLoading = false;
     this._brands = [];
     this._prices = [];
     this._products = [];
     this._filteredProducts = [];
   }
 
-  setStatus(status: DataLoadingStatus): void {
-    this._status = status;
+  setIsLoading(status: boolean): void {
+    this._isLoading = status;
   }
   setBrands(brands: string[]): void {
     this._brands = brands;
@@ -35,8 +33,8 @@ class ProductStore {
     this._filteredProducts = products;
   }
 
-  get status(): string {
-    return this._status;
+  get isLoading(): boolean {
+    return this._isLoading;
   }
   get brands(): string[] {
     return this._brands;

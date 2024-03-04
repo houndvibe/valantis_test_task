@@ -43,7 +43,7 @@ const TableFilter: React.FC<TableFilterProps> = ({
     setFilterType(value);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
+  const handleFilterKeyEnter = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === "Enter") {
       handleSendFilterQuery();
     }
@@ -67,7 +67,7 @@ const TableFilter: React.FC<TableFilterProps> = ({
 
     if (!filterType || !filterQuery) {
       const message = getFilterErrorMessage(filterType, filterQuery);
-      setErrorMessage(message!);
+      setErrorMessage(message);
       return;
     }
 
@@ -81,8 +81,8 @@ const TableFilter: React.FC<TableFilterProps> = ({
   };
 
   return (
-    <Flex gap={"middle"}>
-      Тип:
+    <Flex gap={"middle"} align="center">
+      Категория:
       <Select
         defaultValue={filterType}
         value={filterType}
@@ -93,7 +93,7 @@ const TableFilter: React.FC<TableFilterProps> = ({
           { value: "price", label: "Price" },
         ]}
         onChange={handleChangeFilterType}
-        onKeyDown={handleKeyDown}
+        onKeyDown={handleFilterKeyEnter}
       />
       Значение:
       {filterType == "brand" ? (
@@ -104,7 +104,7 @@ const TableFilter: React.FC<TableFilterProps> = ({
             return { value: brand, label: brand };
           })}
           onChange={handleChangeBrandFilter}
-          onKeyDown={handleKeyDown}
+          onKeyDown={handleFilterKeyEnter}
         />
       ) : filterType == "price" ? (
         <InputNumber
@@ -113,7 +113,7 @@ const TableFilter: React.FC<TableFilterProps> = ({
           min={minPrice}
           max={maxPrice}
           onChange={handleChangePriceFilter}
-          onKeyDown={handleKeyDown}
+          onKeyDown={handleFilterKeyEnter}
           onBlur={() => !priceFilter && setPriceFilter(minPrice)}
         />
       ) : (
@@ -122,14 +122,14 @@ const TableFilter: React.FC<TableFilterProps> = ({
           style={{ width: 120 }}
           placeholder="Золотое кольцо..."
           onChange={handleChangeProductFilter}
-          onKeyDown={handleKeyDown}
+          onKeyDown={handleFilterKeyEnter}
         />
       )}
       <Button onClick={handleSendFilterQuery}>Filter</Button>
       {isTableFiltered ? (
         <Button onClick={handleResetFilter}>Reset Filter</Button>
       ) : null}
-      {errosMessage ? <div style={{ color: "red" }}>{errosMessage}</div> : null}
+      {errosMessage && <div style={{ color: "red" }}>{errosMessage}</div>}
     </Flex>
   );
 };

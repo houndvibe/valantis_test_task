@@ -20,11 +20,11 @@ const App = () => {
           <Flex justify="space-between">
             <div>Valantis test task</div>
             <Flex wrap="wrap" gap="large">
-              <NavLink to="info" className={classes.navlink}>
+              <NavLink to="/" className={classes.navlink}>
                 Инфо
               </NavLink>
-              <NavLink to="products" className={classes.navlink}>
-                Таблица
+              <NavLink to="/products" className={classes.navlink}>
+                Продукты
               </NavLink>
             </Flex>
           </Flex>

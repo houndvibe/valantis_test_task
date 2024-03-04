@@ -7,10 +7,8 @@ import {
 import ProductStore from "../store/productsStore";
 import $axios_auth from "./interceptor";
 
-type ProductBrand = null | string;
-
 export interface ProductProps {
-  brand: ProductBrand;
+  brand: string;
   id: string;
   price: number;
   product: string;
@@ -27,6 +25,7 @@ export interface FilterParams {
 }
 
 export default class ValantisApi {
+  //Имплементирум дефолтные методы представленного api
   static async get_ids(offset?: number, limit?: number) {
     try {
       const response = await $axios_auth.post("/", {
@@ -51,11 +50,7 @@ export default class ValantisApi {
     }
   }
 
-  static async get_fields(
-    field: string,
-    offset?: number,
-    limit?: number
-  ): Promise<ProductBrand[]> {
+  static async get_fields(field: string, offset?: number, limit?: number) {
     try {
       const response = await $axios_auth.post("/", {
         action: "get_fields",
@@ -79,39 +74,43 @@ export default class ValantisApi {
     }
   }
 
-  //метод, который позволяет получить массив с продуктами, с заданным отступом и лимитом
+  //Добавим несколько доболнительных, более универсальных методов:
+  //Каждый из них в случае ошибки Api выводит текст ошибки и отправляет повторный запрос
+
+  //метод, который позволяет получить массив с продуктами, с заданным отступом и лимитом, записать его в стор, и определисть статус загрузки.
   static async getProducts(offset?: number, limit?: number) {
     try {
-      ProductStore.setStatus("loading");
+      ProductStore.setIsLoading(true);
 
       const ids = await this.get_ids(offset, limit);
       const data = await this.get_items(ids);
 
       ProductStore.setProducts(data);
-      ProductStore.setStatus("ok");
+      ProductStore.setIsLoading(false);
     } catch (error: unknown) {
       showError(error);
       reconnectOnError(this.getProducts, offset, limit);
     }
   }
 
-  //метод, который позовляет получить фильтрованный массив с продуктами
+  //метод, который позовляет получить фильтрованный массив с продуктами, записать его в стор, и определисть статус загрузки.
+
   static async getFilteredProducts(params: FilterParams) {
     try {
-      ProductStore.setStatus("loading");
+      ProductStore.setIsLoading(true);
 
       const filteredIds = await this.filter(params);
       const data = await this.get_items(filteredIds);
 
       ProductStore.setFilteredProducts(data);
-      ProductStore.setStatus("ok");
+      ProductStore.setIsLoading(false);
     } catch (error) {
       showError(error);
       reconnectOnError(this.getFilteredProducts, params);
     }
   }
 
-  //метод, который позовляет получить список брендов для дальнейшего использования в фильтре
+  //метод, который позовляет получить список брендов для дальнейшего использования в select-фильтре по бренду
   static async getAllBrands() {
     try {
       const brands = await ValantisApi.get_fields("brand");
@@ -148,7 +147,7 @@ export default class ValantisApi {
     }
   }
 
-  //Метод для получения необоходимых данных с сервера при запуске приложения.
+  //Метод для получения всех необоходимых данных при запуске приложения.
   static async init() {
     this.getProducts();
     this.getAllBrands();

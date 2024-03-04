@@ -8,7 +8,7 @@ import TableFilter from "../TableFilter/TableFilter";
 import { useMemo, useState } from "react";
 
 const ProductTable = observer(() => {
-  const loadingStatus = productsStore.status;
+  const isLoading = productsStore.isLoading;
 
   const [isTableFiltered, setIsTableFiltered] = useState(false);
 
@@ -62,9 +62,7 @@ const ProductTable = observer(() => {
 
   return (
     <div className={classes.table}>
-      {loadingStatus !== "ok" && (
-        <div className={classes.thead}>Запрашиваем данные...</div>
-      )}
+      {isLoading && <div className={classes.thead}>Запрашиваем данные...</div>}
       <Table
         title={() => (
           <TableFilter
@@ -72,7 +70,7 @@ const ProductTable = observer(() => {
             isTableFiltered={isTableFiltered}
           />
         )}
-        loading={loadingStatus === "ok" ? false : true}
+        loading={isLoading ? true : false}
         dataSource={processedTableData}
         columns={columns}
         pagination={{
