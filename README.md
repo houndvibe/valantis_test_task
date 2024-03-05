@@ -1,6 +1,10 @@
 # Valantis_test_task
 
 ## Липатов А.С
+Telegram: **https://t.me/ArtemlyTG**
+
+Mail: **houndvibe@gmail.com**
+
 Ссылка на рабочую версию: **https://houndvibe.github.io/valantis_test_task/**
 
 Обращение к серверу происходит при помощи статичиских методов класса **ValantisApi**, которые внутри себя используют **$axios_auth**.
