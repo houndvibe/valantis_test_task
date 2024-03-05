@@ -14,6 +14,7 @@ const AppNotificationContainer = () => {
       draggable
       pauseOnHover
       theme="colored"
+      style={{ fontSize: "20px" }}
     />
   );
 };
