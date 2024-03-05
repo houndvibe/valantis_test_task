@@ -44,7 +44,7 @@ export class ValantisApiError extends Error {
 }
 
 //////////Формируем сообщение об ошибке api
-export const getErrorMessage = (error: unknown): string => {
+export const getErrorMessage = (error: unknown, method: string): string => {
   const message: string =
     error instanceof Error
       ? error.message
@@ -54,7 +54,7 @@ export const getErrorMessage = (error: unknown): string => {
       ? error
       : "Something went wrong";
 
-  return message + ". Sending another request...";
+  return `В методe ${method} произошла ошибка: "${message}" Отправляем повторный запрос...`;
 };
 
 //////////Формируем текст предупреждения о незаполненных параметрах фильтра

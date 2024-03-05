@@ -35,7 +35,7 @@ export default class ValantisApi {
       });
       return response.data.result;
     } catch (error: unknown) {
-      throw new ValantisApiError(getErrorMessage(error));
+      throw new ValantisApiError(getErrorMessage(error, "get_ids"));
     }
   }
 
@@ -47,7 +47,7 @@ export default class ValantisApi {
       });
       return response.data.result;
     } catch (error: unknown) {
-      throw new ValantisApiError(getErrorMessage(error));
+      throw new ValantisApiError(getErrorMessage(error, "get_items"));
     }
   }
 
@@ -59,7 +59,7 @@ export default class ValantisApi {
       });
       return response.data.result;
     } catch (error: unknown) {
-      throw new ValantisApiError(getErrorMessage(error));
+      throw new ValantisApiError(getErrorMessage(error, "get_fields"));
     }
   }
 
@@ -71,7 +71,7 @@ export default class ValantisApi {
       });
       return response.data.result;
     } catch (error: unknown) {
-      throw new ValantisApiError(getErrorMessage(error));
+      throw new ValantisApiError(getErrorMessage(error, "filter"));
     }
   }
 
