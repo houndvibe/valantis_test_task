@@ -1,6 +1,7 @@
 import ValantisApi, { FilterParams, ProductProps } from "../api/valantisApi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import productsStore from "../store/productsStore";
 
 //////////Получаем форматированный таймштамп для авторизационного токена
 export const getFormattedTimestamp = (currentDate: Date) => {
@@ -34,7 +35,7 @@ export const processTableData = (items: ProductProps[]) => {
   return processedProductsData;
 };
 
-//Заведем отдельный класс для ошибок api
+////////////Заведем отдельный класс для ошибок api
 export class ValantisApiError extends Error {
   constructor(message: string) {
     super(message);
@@ -70,10 +71,17 @@ export const getFilterErrorMessage = (
     : "";
 };
 
-//Функция, которая выводит ошибку в виде нотификации +  в консоль
+//////////Функция, которая выводит ошибку в консоль + в виде нотификации
 export const showError = (error: unknown) => {
-  toast.error(`${error}`);
   console.error(error);
+
+  if (!productsStore.isError) {
+    toast.error(`${error}`);
+    productsStore.setisError(true);
+    setTimeout(() => {
+      productsStore.setisError(false);
+    }, 3000);
+  }
 };
 
 type ValantisApiAdditionalMethods =
@@ -82,12 +90,13 @@ type ValantisApiAdditionalMethods =
   | (() => Promise<void>)
   | (() => Promise<void>);
 
-//функция для отправки повторного запрос при ошибке api
+//////////функция для отправки повторного запрос при ошибке api
 export const reconnectOnError = (
   func: ValantisApiAdditionalMethods,
   ...rest: (number | FilterParams | undefined)[]
 ) => {
   const bound = func.bind(ValantisApi, ...rest);
+
   setTimeout(() => {
     bound();
   }, 1500);

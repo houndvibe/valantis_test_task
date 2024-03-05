@@ -3,6 +3,7 @@ import { ProductProps } from "../api/valantisApi";
 
 class ProductStore {
   _isLoading: boolean;
+  _isError: boolean;
   _brands: string[];
   _prices: number[];
   _products: ProductProps[] | [];
@@ -11,6 +12,7 @@ class ProductStore {
   constructor() {
     makeAutoObservable(this);
     this._isLoading = false;
+    this._isError = false;
     this._brands = [];
     this._prices = [];
     this._products = [];
@@ -19,6 +21,9 @@ class ProductStore {
 
   setIsLoading(status: boolean): void {
     this._isLoading = status;
+  }
+  setisError(isError: boolean): void {
+    this._isError = isError;
   }
   setBrands(brands: string[]): void {
     this._brands = brands;
@@ -35,6 +40,9 @@ class ProductStore {
 
   get isLoading(): boolean {
     return this._isLoading;
+  }
+  get isError(): boolean {
+    return this._isError;
   }
   get brands(): string[] {
     return this._brands;
