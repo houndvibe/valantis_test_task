@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import {
   ValantisApiError,
   getErrorMessage,
@@ -77,24 +78,33 @@ export default class ValantisApi {
   //Добавим несколько доболнительных, более универсальных методов:
   //Каждый из них в случае ошибки Api выводит текст ошибки и отправляет повторный запрос
 
-  //метод, который позволяет получить массив с продуктами, с заданным отступом и лимитом, записать его в стор, и определисть статус загрузки.
-  static async getProducts(offset?: number, limit?: number) {
+  //метод, который позволяет получить массив с продуктами, записать его в стор, и определисть статус загрузки.
+  static async getAllProducts() {
     try {
-      ProductStore.setIsLoading(true);
+      //получим данные для первых страниц, чтобы юзеру было чем заняться
+      if (!ProductStore.products.length) {
+        ProductStore.setIsLoading(true);
+        const firstIds = await this.get_ids(0, 300);
+        const firstData = await this.get_items(firstIds);
+        ProductStore.setProducts(firstData);
+        ProductStore.setIsLoading(false);
+      }
 
-      const ids = await this.get_ids(offset, limit);
-      const data = await this.get_items(ids);
-
-      ProductStore.setProducts(data);
-      ProductStore.setIsLoading(false);
+      //Получим остальные данные фоном
+      ProductStore.setIsUploading(true);
+      const restIds = await this.get_ids(300);
+      const restData = await this.get_items(restIds);
+      ProductStore.setProducts(ProductStore.products.concat(restData));
+      ProductStore.setIsUploading(false);
+      toast.success(`Все данные успешно загружены`);
     } catch (error: unknown) {
+      ProductStore.setIsUploading(false);
       showError(error);
-      reconnectOnError(this.getProducts, offset, limit);
+      reconnectOnError(this.getAllProducts);
     }
   }
 
   //метод, который позовляет получить фильтрованный массив с продуктами, записать его в стор, и определисть статус загрузки.
-
   static async getFilteredProducts(params: FilterParams) {
     try {
       ProductStore.setIsLoading(true);
@@ -133,6 +143,7 @@ export default class ValantisApi {
   static async getAllPrices() {
     try {
       const prices = await ValantisApi.get_fields("price");
+      ProductStore.setDataArrayLength(prices.length);
 
       const set = new Set();
       for (const price of prices) {
@@ -149,8 +160,8 @@ export default class ValantisApi {
 
   //Метод для получения всех необоходимых данных при запуске приложения.
   static async init() {
-    this.getProducts();
     this.getAllBrands();
     this.getAllPrices();
+    this.getAllProducts();
   }
 }

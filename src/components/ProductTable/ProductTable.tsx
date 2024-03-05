@@ -9,6 +9,7 @@ import { useMemo, useState } from "react";
 
 const ProductTable = observer(() => {
   const isLoading = productsStore.isLoading;
+  const isUploading = productsStore.isUploading;
 
   const [isTableFiltered, setIsTableFiltered] = useState(false);
 
@@ -63,6 +64,9 @@ const ProductTable = observer(() => {
   return (
     <div className={classes.table}>
       {isLoading && <div className={classes.thead}>Запрашиваем данные...</div>}
+      {isUploading && (
+        <div className={classes.thead}>Загружаем остальное, минутку...</div>
+      )}
       <Table
         title={() => (
           <TableFilter
