@@ -57,7 +57,7 @@ export const getErrorMessage = (error: unknown): string => {
   return message + ". Sending another request...";
 };
 
-//////////Формируем сообщение предупреждения о незаполненных параметрах фильтра
+//////////Формируем текст предупреждения о незаполненных параметрах фильтра
 export const getFilterErrorMessage = (
   filterType: string,
   filterQuery: string | number
