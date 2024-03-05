@@ -68,6 +68,8 @@ export const getFilterErrorMessage = (
     ? "Укажите бренд "
     : filterType === "product" && !filterQuery
     ? "Укажите наименование "
+    : filterType === "price" && !filterQuery
+    ? "Укажите цену"
     : "";
 };
 

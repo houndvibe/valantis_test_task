@@ -78,50 +78,34 @@ export default class ValantisApi {
   //Добавим несколько доболнительных, более универсальных методов:
   //Каждый из них в случае ошибки Api выводит текст ошибки и отправляет повторный запрос
 
-  //метод, который позволяет получить массив с продуктами, записать его в стор, и определисть статус загрузки.
-  static async getAllProducts() {
+  //метод, который позволяет получить массив с продуктами указанной величины c указанным отступом и записать его в стор.
+  static async getProducts(offset?: number, limit?: number) {
+    const ids = await this.get_ids(offset, limit);
+    const products = await this.get_items(ids);
+    ProductStore.setProducts(ProductStore.products.concat(products));
+  }
+
+  //метод, который позовляет быстро получить список цен для дальнейшего вычисления нижней и верхней границы фильтра цен
+  static async getPrices() {
     try {
-      //получим данные для первых страниц, чтобы юзеру было чем заняться
-      if (!ProductStore.products.length) {
-        ProductStore.setIsLoading(true);
-        const firstIds = await this.get_ids(0, 300);
-        const firstData = await this.get_items(firstIds);
-        ProductStore.setProducts(firstData);
-        ProductStore.setIsLoading(false);
+      const prices = await ValantisApi.get_fields("price");
+      //в нашем случае это хорошее место чтобы определить общее количество данных
+      ProductStore.setDataArrayLength(prices.length);
+      const set = new Set();
+      for (const price of prices) {
+        set.add(price);
       }
 
-      //Получим остальные данные фоном
-      ProductStore.setIsUploading(true);
-      const restIds = await this.get_ids(300);
-      const restData = await this.get_items(restIds);
-      ProductStore.setProducts(ProductStore.products.concat(restData));
-      ProductStore.setIsUploading(false);
-      toast.success(`Все данные успешно загружены`);
-    } catch (error: unknown) {
-      ProductStore.setIsUploading(false);
-      showError(error);
-      reconnectOnError(this.getAllProducts);
-    }
-  }
-
-  //метод, который позовляет получить фильтрованный массив с продуктами, записать его в стор, и определисть статус загрузки.
-  static async getFilteredProducts(params: FilterParams) {
-    try {
-      ProductStore.setIsLoading(true);
-
-      const filteredIds = await this.filter(params);
-      const data = await this.get_items(filteredIds);
-
-      ProductStore.setFilteredProducts(data);
-      ProductStore.setIsLoading(false);
+      const uniquePrices: number[] = Array.from(set.values()) as number[];
+      ProductStore.setPrices(uniquePrices);
     } catch (error) {
       showError(error);
-      reconnectOnError(this.getFilteredProducts, params);
+      reconnectOnError(this.getPrices);
     }
   }
 
-  //метод, который позовляет получить список брендов для дальнейшего использования в select-фильтре по бренду
-  static async getAllBrands() {
+  //метод, который позовляет быстро получить список брендов для дальнейшего использования в select-фильтре по бренду
+  static async getBrands() {
     try {
       const brands = await ValantisApi.get_fields("brand");
       const filtered = brands.filter((item: string | null) => item);
@@ -135,33 +119,52 @@ export default class ValantisApi {
       ProductStore.setBrands(uniqueItems);
     } catch (error) {
       showError(error);
-      reconnectOnError(this.getAllBrands);
+      reconnectOnError(this.getBrands);
     }
   }
 
-  //метод, который позовляет получить список цен для дальнейшего вычисления нижней и верхней границы фильтра цен
-  static async getAllPrices() {
+  //метод, который позовляет получить фильтрованный массив с продуктами, записать его в стор, и определисть статус фильтрации.
+  static async getFilteredProducts(params: FilterParams) {
     try {
-      const prices = await ValantisApi.get_fields("price");
-      ProductStore.setDataArrayLength(prices.length);
+      ProductStore.setIsFiltering(true);
+      const filteredIds = await this.filter(params);
+      const data = await this.get_items(filteredIds);
 
-      const set = new Set();
-      for (const price of prices) {
-        set.add(price);
-      }
-
-      const uniquePrices: number[] = Array.from(set.values()) as number[];
-      ProductStore.setPrices(uniquePrices);
+      ProductStore.setFilteredProducts(data);
+      ProductStore.setIsFiltering(false);
     } catch (error) {
       showError(error);
-      reconnectOnError(this.getAllPrices);
+      reconnectOnError(this.getFilteredProducts, params);
     }
   }
 
-  //Метод для получения всех необоходимых данных при запуске приложения.
+  //метод, который позволяет получить все необходимые данные при запуске приложения
   static async init() {
-    this.getAllBrands();
-    this.getAllPrices();
-    this.getAllProducts();
+    let dataTotalCount, dataFirstPartLength, dataSecondPartLength;
+    try {
+      //быстро получим 5% данных для заполнения первых страниц, чтобы юзеру было чем заняться
+      if (!ProductStore.products.length) {
+        ProductStore.setIsLoading(true);
+        await this.getBrands();
+        await this.getPrices();
+        //разобьем общее количество данных на 2 части 5% и 95%
+        dataTotalCount = ProductStore.dataArrayLength;
+        dataFirstPartLength = Math.round((dataTotalCount / 100) * 5);
+        dataSecondPartLength = dataTotalCount - dataFirstPartLength;
+        //быстро получим 5%
+        await this.getProducts(0, dataFirstPartLength);
+        ProductStore.setIsLoading(false);
+      }
+
+      //Получим остальные 95% данные фоном
+      ProductStore.setIsUploading(true);
+      await this.getProducts(dataFirstPartLength!, dataSecondPartLength!);
+      ProductStore.setIsUploading(false);
+      toast.success(`Все данные успешно загружены`);
+    } catch (error: unknown) {
+      ProductStore.setIsUploading(false);
+      showError(error);
+      reconnectOnError(this.init);
+    }
   }
 }
