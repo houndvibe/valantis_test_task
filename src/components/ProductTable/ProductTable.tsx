@@ -9,6 +9,8 @@ import { useMemo, useState } from "react";
 
 const ProductTable = observer(() => {
   const isLoading = productsStore.isLoading;
+  const isUploading = productsStore.isUploading;
+  const isFiltering = productsStore.isFiltering;
 
   const [isTableFiltered, setIsTableFiltered] = useState(false);
 
@@ -38,15 +40,15 @@ const ProductTable = observer(() => {
       key: "id",
     },
     {
-      title: "Product",
+      title: "Наименование",
       dataIndex: "product",
       key: "product",
       filterSearch: true,
     },
     {
-      title: "Price",
+      title: "Цена",
       dataIndex: "price",
-      key: "aprice",
+      key: "price",
       sorter: {
         compare: (a: TableProductProps, b: TableProductProps) =>
           a.price - b.price,
@@ -54,7 +56,7 @@ const ProductTable = observer(() => {
       },
     },
     {
-      title: "Brand",
+      title: "Бренд",
       dataIndex: "brand",
       key: "brand",
     },
@@ -63,6 +65,10 @@ const ProductTable = observer(() => {
   return (
     <div className={classes.table}>
       {isLoading && <div className={classes.thead}>Запрашиваем данные...</div>}
+      {isUploading && (
+        <div className={classes.thead}>Загружаем остальное, минутку...</div>
+      )}
+      {isFiltering && <div className={classes.thead}>Фильтруем данные...</div>}
       <Table
         title={() => (
           <TableFilter
@@ -70,7 +76,7 @@ const ProductTable = observer(() => {
             isTableFiltered={isTableFiltered}
           />
         )}
-        loading={isLoading ? true : false}
+        loading={isLoading || isFiltering ? true : false}
         dataSource={processedTableData}
         columns={columns}
         pagination={{

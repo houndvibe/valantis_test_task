@@ -15,13 +15,14 @@ const TableFilter: React.FC<TableFilterProps> = ({
 }) => {
   const brands = productsStore.brands;
   const prices = productsStore.prices;
+
   const [minPrice, maxPrice] = [Math.min(...prices), Math.max(...prices)];
 
   const [filterType, setFilterType] = useState("");
 
   const [brandFilter, setBrandFilter] = useState("");
   const [productFilter, setProductFilter] = useState("");
-  const [priceFilter, setPriceFilter] = useState(minPrice);
+  const [priceFilter, setPriceFilter] = useState(0);
 
   const [errosMessage, setErrorMessage] = useState("");
 
@@ -65,6 +66,8 @@ const TableFilter: React.FC<TableFilterProps> = ({
         ? brandFilter
         : productFilter;
 
+    console.log(filterQuery);
+
     if (!filterType || !filterQuery) {
       const message = getFilterErrorMessage(filterType, filterQuery);
       setErrorMessage(message);
@@ -80,7 +83,7 @@ const TableFilter: React.FC<TableFilterProps> = ({
     setIsTableFiltered(true);
   };
 
-  return (
+  return brands.length && prices.length ? (
     <Flex gap={"middle"} align="center">
       Категория:
       <Select
@@ -88,9 +91,9 @@ const TableFilter: React.FC<TableFilterProps> = ({
         value={filterType}
         style={{ width: 120 }}
         options={[
-          { value: "product", label: "Product" },
-          { value: "brand", label: "Brand" },
-          { value: "price", label: "Price" },
+          { value: "product", label: "Наименование" },
+          { value: "brand", label: "Бренд" },
+          { value: "price", label: "Цена" },
         ]}
         onChange={handleChangeFilterType}
         onKeyDown={handleFilterKeyEnter}
@@ -125,13 +128,12 @@ const TableFilter: React.FC<TableFilterProps> = ({
           onKeyDown={handleFilterKeyEnter}
         />
       )}
-      <Button onClick={handleSendFilterQuery}>Filter</Button>
+      <Button onClick={handleSendFilterQuery}>Фильтровать</Button>
       {isTableFiltered ? (
-        <Button onClick={handleResetFilter}>Reset Filter</Button>
+        <Button onClick={handleResetFilter}>Сбросить фильтр</Button>
       ) : null}
       {errosMessage && <div style={{ color: "red" }}>{errosMessage}</div>}
     </Flex>
-  );
+  ) : null;
 };
-
 export default TableFilter;
