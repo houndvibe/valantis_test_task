@@ -8,6 +8,8 @@ export const getErrorMessage = (error: unknown, method: string): string => {
         ? "400: Неверный запрос"
         : error.response.status === 401
         ? "401: Ошибка авторизации"
+        : error.response.status === 404
+        ? "404: Страница не найдена"
         : error.response.status === 500
         ? "500: Ошибка сервера"
         : "Что то пошло не так...";
