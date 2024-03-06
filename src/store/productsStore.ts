@@ -2,15 +2,15 @@ import { makeAutoObservable } from "mobx";
 import { ProductProps } from "../types/interfaces";
 
 class ProductStore {
-  _isLoading: boolean;
-  _isUploading: boolean;
-  _isFiltering: boolean;
-  _isError: boolean;
-  _brands: string[];
-  _prices: number[];
-  _products: ProductProps[] | [];
-  _filteredProducts: ProductProps[] | [];
-  _dataArrayLength: number;
+  private _isLoading: boolean;
+  private _isUploading: boolean;
+  private _isFiltering: boolean;
+  private _isError: boolean;
+  private _brands: string[];
+  private _prices: number[];
+  private _products: ProductProps[] | [];
+  private _filteredProducts: ProductProps[] | [];
+  private _dataArrayLength: number;
 
   constructor() {
     makeAutoObservable(this);
