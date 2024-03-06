@@ -13,6 +13,6 @@ export const getFilteredProducts = async (params: FilterParams) => {
     productsStore.setFilteredProducts(data);
     productsStore.setIsFiltering(false);
   } catch (error) {
-    reconnectOnError(getFilteredProducts);
+    reconnectOnError(getFilteredProducts, params);
   }
 };

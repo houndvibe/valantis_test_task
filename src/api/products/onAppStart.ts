@@ -33,7 +33,6 @@ export const onAppStart = async () => {
 
     toast.success(`Все данные успешно загружены`);
   } catch (error: unknown) {
-    productsStore.setIsUploading(false);
     reconnectOnError(onAppStart);
   }
 };
