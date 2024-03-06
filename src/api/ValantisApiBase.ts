@@ -13,8 +13,9 @@ export default class ValantisApiBase {
       });
       return response.data.result;
     } catch (error: unknown) {
-      showError(new ValantisApiError(getErrorMessage(error, action)));
-      throw new ValantisApiError(getErrorMessage(error, action));
+      const err = new ValantisApiError(getErrorMessage(error, action));
+      showError(err);
+      throw err;
     }
   }
 

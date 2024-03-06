@@ -9,5 +9,5 @@ export const getErrorMessage = (error: unknown, method: string): string => {
       ? error
       : "Something went wrong";
 
-  return `В методe ${method} произошла ошибка: "${message}" Отправляем повторный запрос...`;
+  return `В методe ${method} произошла ошибка: "${message}" Отправлен повторный запрос...`;
 };

@@ -2,7 +2,7 @@ import { Flex, Layout } from "antd";
 import classes from "./App.module.scss";
 import { NavLink, Outlet } from "react-router-dom";
 import AppNotificationContainer from "../../components/AppNotificationContainer/AppNotificationContainer";
-import { onAppStart } from "../../api/productsApi/onAppStart";
+import { onAppStart } from "../../api/products/onAppStart";
 const { Header, Footer, Content } = Layout;
 
 onAppStart();

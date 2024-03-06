@@ -68,9 +68,9 @@ const InfoBlock = ({ theme }: { theme: string }) => {
             </p>
             <Divider />
             <p>
-              Обращение к серверу происходит при помощи статичиских методов
-              класса
-              <BoldText> ValantisApi</BoldText>, которые внутри себя используют
+              Обращение к серверу происходит при помощи static методов класса
+              <BoldText> ValantisApiBase</BoldText>, которые внутри себя
+              используют
               <BoldText> $axios_auth</BoldText>.
             </p>
             <Divider />

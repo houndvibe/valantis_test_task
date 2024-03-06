@@ -3,7 +3,7 @@ import productsStore from "../../store/productsStore";
 import { useState } from "react";
 import { TableFilterProps } from "../../types/interfaces";
 import { getFilterWarningMessage } from "../../services/getFilterWarningMessage";
-import { getFilteredProducts } from "../../api/productsApi/getFilteredProducts";
+import { getFilteredProducts } from "../../api/products/getFilteredProducts";
 
 const TableFilter: React.FC<TableFilterProps> = ({
   onFilter: setIsTableFiltered,
