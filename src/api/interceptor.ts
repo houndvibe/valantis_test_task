@@ -1,9 +1,9 @@
 import md5 from "md5";
 import axios from "axios";
-import { getFormattedTimestamp } from "../services/services";
+import { getFormattedTimestamp } from "../services/getFormattedTimestamp";
 
 const PASSWORD = "Valantis";
-const FORMATTED_TIMESTAMP = getFormattedTimestamp(new Date());
+const FORMATTED_TIMESTAMP = getFormattedTimestamp();
 
 const AUTH_TOKEN = md5(`${PASSWORD}_${FORMATTED_TIMESTAMP}`);
 

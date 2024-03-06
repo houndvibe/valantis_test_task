@@ -1,17 +1,13 @@
 import { Flex, Layout } from "antd";
 import classes from "./App.module.scss";
 import { NavLink, Outlet } from "react-router-dom";
-import { useEffect } from "react";
-import ValantisApi from "../../api/valantisApi";
 import AppNotificationContainer from "../../components/AppNotificationContainer/AppNotificationContainer";
-
+import { onAppStart } from "../../api/productsApi/onAppStart";
 const { Header, Footer, Content } = Layout;
 
-const App = () => {
-  useEffect(() => {
-    ValantisApi.init();
-  }, []);
+onAppStart();
 
+const App = () => {
   return (
     <div className={classes.app}>
       <AppNotificationContainer />

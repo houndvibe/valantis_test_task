@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { ProductProps } from "../api/valantisApi";
+import { ProductProps } from "../types/interfaces";
 
 class ProductStore {
   _isLoading: boolean;

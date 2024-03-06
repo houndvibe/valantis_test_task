@@ -1,13 +1,9 @@
 import { Button, Flex, Input, InputNumber, Select } from "antd";
 import productsStore from "../../store/productsStore";
-import ValantisApi from "../../api/valantisApi";
 import { useState } from "react";
-import { getFilterErrorMessage } from "../../services/services";
-
-interface TableFilterProps {
-  isTableFiltered: boolean;
-  onFilter: (value: boolean) => void;
-}
+import { TableFilterProps } from "../../types/interfaces";
+import { getFilterWarningMessage } from "../../services/getFilterWarningMessage";
+import { getFilteredProducts } from "../../api/productsApi/getFilteredProducts";
 
 const TableFilter: React.FC<TableFilterProps> = ({
   onFilter: setIsTableFiltered,
@@ -66,15 +62,13 @@ const TableFilter: React.FC<TableFilterProps> = ({
         ? brandFilter
         : productFilter;
 
-    console.log(filterQuery);
-
     if (!filterType || !filterQuery) {
-      const message = getFilterErrorMessage(filterType, filterQuery);
+      const message = getFilterWarningMessage(filterType, filterQuery);
       setErrorMessage(message);
       return;
     }
 
-    ValantisApi.getFilteredProducts({
+    getFilteredProducts({
       filterType,
       filterQuery: filterQuery,
     });

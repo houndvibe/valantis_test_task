@@ -2,10 +2,11 @@ import classes from "./ProductTable.module.scss";
 import { Table } from "antd";
 import { observer } from "mobx-react-lite";
 import productsStore from "../../store/productsStore";
-import { processTableData } from "../../services/services";
-import { TableProductProps } from "../../api/valantisApi";
+
 import TableFilter from "../TableFilter/TableFilter";
 import { useMemo, useState } from "react";
+import { TableProductProps } from "../../types/interfaces";
+import { processTableData } from "../../services/processTableData";
 
 const ProductTable = observer(() => {
   const isLoading = productsStore.isLoading;
