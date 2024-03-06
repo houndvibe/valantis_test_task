@@ -1,6 +1,6 @@
 import { ProductProps } from "../types/interfaces";
 
-//////////Приводим полученные с сервера данные к необходимому виду
+//Приводим полученные с сервера данные к необходимому виду
 export const processTableData = (items: ProductProps[]) => {
   //Удаляем дубли по id
   const map = new Map();

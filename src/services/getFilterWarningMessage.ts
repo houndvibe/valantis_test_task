@@ -1,4 +1,4 @@
-//////////Формируем предупреждение о незаполненных полях фильтра
+///Формируем предупреждение о незаполненных полях фильтра
 export const getFilterWarningMessage = (
   filterType: string,
   filterQuery: string | number

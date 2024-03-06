@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import productsStore from "../store/productsStore";
 
-//////////Функция, которая выводит ошибку в консоль + в виде нотификации
+//Функция, которая выводит ошибку в консоль + в виде нотификации
 export const showError = (error: unknown) => {
   console.error(error);
 

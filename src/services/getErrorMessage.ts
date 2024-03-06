@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 
-//////////Формируем сообщение об ошибке
+//Формируем сообщение об ошибке
 export const getErrorMessage = (error: unknown, method: string): string => {
   if (error instanceof AxiosError && error.response) {
     const message: string =
