@@ -6,7 +6,7 @@ import { getProducts } from "./getProducts";
 import { reconnectOnError } from "../../services/reconnectOnError";
 import { calculateOffsets } from "../../services/calculateOFfsets";
 
-//метод, который позволяет получить все необходимые данные при запуске приложения
+//onAppStart позволяет получить все необходимые данные при запуске приложения
 
 export const onAppStart = async () => {
   let dataFirstPartLength, dataSecondPartLength;

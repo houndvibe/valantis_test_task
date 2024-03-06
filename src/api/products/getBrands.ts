@@ -1,7 +1,7 @@
 import productsStore from "../../store/productsStore";
 import ValantisApiBase from "../ValantisApiBase";
 
-//метод, который позовляет быстро получить список брендов для дальнейшего использования в select-фильтре по бренду
+//getBrands озовляет быстро получить список брендов для дальнейшего использования в select-фильтре по бренду
 
 export const getBrands = async () => {
   const brands = await ValantisApiBase.get_fields("brand");

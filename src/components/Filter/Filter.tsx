@@ -49,7 +49,7 @@ const Filter: React.FC<FilterProps> = ({
 
     getFilteredProducts({
       filterType,
-      filterQuery: filterQuery,
+      filterQuery,
     });
 
     setErrorMessage("");

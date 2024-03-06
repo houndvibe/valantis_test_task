@@ -31,7 +31,7 @@ export default class ValantisApiBase {
     return this.apiBase("get_fields", { field, offset, limit });
   }
 
-  static async filter(params: FilterParams) {
-    return this.apiBase("filter", { [params.filterType]: params.filterQuery });
+  static async filter({ filterType, filterQuery }: FilterParams) {
+    return this.apiBase("filter", { [filterType]: filterQuery });
   }
 }
