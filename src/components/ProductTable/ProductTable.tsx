@@ -2,11 +2,10 @@ import classes from "./ProductTable.module.scss";
 import { Table } from "antd";
 import { observer } from "mobx-react-lite";
 import productsStore from "../../store/productsStore";
-
-import TableFilter from "../TableFilter/TableFilter";
 import { useMemo, useState } from "react";
 import { TableProductProps } from "../../types/interfaces";
 import { processTableData } from "../../services/processTableData";
+import Filter from "../Filter/Filter";
 
 const ProductTable = observer(() => {
   const isLoading = productsStore.isLoading;
@@ -72,7 +71,7 @@ const ProductTable = observer(() => {
       {isFiltering && <div className={classes.thead}>Фильтруем данные...</div>}
       <Table
         title={() => (
-          <TableFilter
+          <Filter
             onFilter={setIsTableFiltered}
             isTableFiltered={isTableFiltered}
           />
