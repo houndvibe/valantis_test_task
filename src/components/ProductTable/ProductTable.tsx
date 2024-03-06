@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { processTableData } from "../../services/processTableData";
 import Filter from "../Filter/Filter";
 import columnsData from "./columnsData";
+import Loader from "../Loader/Loader";
 
 const ProductTable = observer(() => {
   const isLoading = productsStore.isLoading;
@@ -25,11 +26,9 @@ const ProductTable = observer(() => {
 
   return (
     <div className={classes.table}>
-      {isLoading && <div className={classes.thead}>Запрашиваем данные...</div>}
-      {isUploading && (
-        <div className={classes.thead}>Загружаем остальное, минутку...</div>
-      )}
-      {isFiltering && <div className={classes.thead}>Фильтруем данные...</div>}
+      {isLoading && <Loader message={"Запрашиваем данные..."} />}
+      {isUploading && <Loader message={"Загружаем остальное, минутку..."} />}
+      {isFiltering && <Loader message={"Фильтруем данные..."} />}
       <Table
         title={() => (
           <Filter
