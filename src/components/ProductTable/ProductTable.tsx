@@ -3,9 +3,9 @@ import { Table } from "antd";
 import { observer } from "mobx-react-lite";
 import productsStore from "../../store/productsStore";
 import { useMemo, useState } from "react";
-import { TableProductProps } from "../../types/interfaces";
 import { processTableData } from "../../services/processTableData";
 import Filter from "../Filter/Filter";
+import columnsData from "./columnsData";
 
 const ProductTable = observer(() => {
   const isLoading = productsStore.isLoading;
@@ -23,45 +23,6 @@ const ProductTable = observer(() => {
     [products]
   );
 
-  const columns = [
-    {
-      title: "№",
-      dataIndex: "index",
-      key: "index",
-      sorter: {
-        compare: (a: TableProductProps, b: TableProductProps) =>
-          a.index - b.index,
-        multiple: 2,
-      },
-    },
-    {
-      title: "id",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
-      title: "Наименование",
-      dataIndex: "product",
-      key: "product",
-      filterSearch: true,
-    },
-    {
-      title: "Цена",
-      dataIndex: "price",
-      key: "price",
-      sorter: {
-        compare: (a: TableProductProps, b: TableProductProps) =>
-          a.price - b.price,
-        multiple: 1,
-      },
-    },
-    {
-      title: "Бренд",
-      dataIndex: "brand",
-      key: "brand",
-    },
-  ];
-
   return (
     <div className={classes.table}>
       {isLoading && <div className={classes.thead}>Запрашиваем данные...</div>}
@@ -78,7 +39,7 @@ const ProductTable = observer(() => {
         )}
         loading={isLoading || isFiltering ? true : false}
         dataSource={processedTableData}
-        columns={columns}
+        columns={columnsData}
         pagination={{
           position: ["topCenter", "bottomCenter"],
           defaultPageSize: 50,

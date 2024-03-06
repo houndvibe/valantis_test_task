@@ -4,14 +4,18 @@
 .info {
   padding: 10px;
   border-radius: 10px;
+  font-size: 25px;
   .about {
     margin-top: 10px;
+    max-height: 65vh;
+    padding: 30px;
     background: white;
     border-radius: 10px;
-    padding: 30px;
     border: 1px solid rgba(128, 128, 128, 0.568);
     overflow: auto;
-    max-height: 65vh;
+    font-family: "Martian Mono", monospace;
+    font-size: 20px;
+    font-weight: 300;
     p {
       text-align: start;
     }
@@ -21,14 +25,6 @@
   }
 
   .me {
-    font-weight: 400;
-    font-family: "Alegreya Sans SC", sans-serif;
-    line-height: 50px;
-  }
-
-  .project {
-    font-weight: 200;
-    font-family: "Martian Mono", monospace;
-    font-size: 30px;
+    line-height: 30px;
   }
 }

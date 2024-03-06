@@ -2,7 +2,7 @@ import $axios_auth from "./interceptor";
 import { FilterParams } from "../types/interfaces";
 import { getErrorMessage } from "../services/getErrorMessage";
 import { showError } from "../services/showError";
-import { ValantisApiError } from "../error/ValantisApiError";
+import { ValantisApiError } from "./error/ValantisApiError";
 
 export default class ValantisApiBase {
   static async apiBase<TParams>(action: string, params: TParams) {
